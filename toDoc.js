@@ -218,7 +218,7 @@
                     }
                 });
             }
-            
+
             // Create page object and store in pages array
             if (pageNum != 0 && pageCont != "") {
                 var pageObj = {
@@ -258,6 +258,18 @@
                 return "";
             }
         };
+
+        /** 
+         * Creates a Page object for the document
+         * @public
+         * @param {string} content - Defines the page's content <br/> Accepts : stringified text | stringified HTML markup <br/> Required
+         * @param {number} number - Defines the Pages's number <br/> Accepts : 1+= <br/> Default value : 0 <br/> Required for individual pages <br/> Required if creating individual pages <br/> Optional if passing a whole HTML document
+         * @memberof toDoc
+         */
+        doc.createParagraph = function() {
+
+        };
+
 
         /** 
          * Creates and stores an image as a local dataURL from image's URL
