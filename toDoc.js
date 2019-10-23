@@ -199,18 +199,36 @@
                 pageNum = number;
             } else {
                 console.log("invalid page number");
+                return;
             }
             // Check for valid page content
             if (typeof(content) == "string" && content.length > 0) {
                 pageCont = content;
             } else {
                 console.log("invalid page content");
+                return;
             }
+
+            // Check for existing page numbers
+            if (oData.aPages.length > 0) {
+                oData.aPages.forEach(function(i){
+                    if (i.hasOwnProperty("pNumber")) {
+                        console.log("pages with page number exist, following pages must also have page numbers")
+                        return;
+                    }
+                });
+            }
+            
             // Create page object and store in pages array
             if (pageNum != 0 && pageCont != "") {
                 var pageObj = {
                     "pNumber": pageNum,
                     "pContent": pageCont
+                };
+                oData.aPages.push(pageObj);
+            } else if (!pageNum && pageCont != "") {
+                var pageObj = {
+                    "pNumber": pageNum,
                 };
                 oData.aPages.push(pageObj);
             }
@@ -224,22 +242,21 @@
          */
         var getPages = function() {
             var pages = oData.aPages;
-            var numOfPages = pages.length;
-            var pageString = "";
-            // Check if individual pages or full html document
-            if (numOfPages > 0) {
+
+            if (pages.length > 0) {
+                var pageString = "";
                 pages.forEach(function(i, index) {
                     // Check for last page
-                    if (i.pNumber == numOfPages) {
+                    if (i.pNumber == (pages.length-1)) {
                         pageString = pageString + oData.pagePre + i.pContent;
                     } else {
                         pageString = pageString + oData.pagePre + i.pContent + oData.pagePost;
                     }
                 });
+                return pageString;
             } else {
-                // full html page
+                return "";
             }
-            return pageString;
         };
 
         /** 
@@ -277,9 +294,11 @@
         /** 
          * Generates and saves a Word document.
          * @public
-         * @param {object} params - Parameters
+         * @param {string} filename - Specifies the name of the document <br/> Required
+         * @param {object} params - Define custom parameters for the document's layout <br/> Optional
+         * @memberof toDoc
          */
-        doc.createDocument = function(params, filename) {
+        doc.createDocument = function(filename, params) {
 
             var docParams = {};
 
@@ -345,7 +364,7 @@
                         //Content
                         "<div class='Section1'>"+ // Section1
                             //Pages 
-                            + getPages() +
+                            getPages() +
                             //Header and Footer
                             "<table id='hrdftrtbl' border='1' cellspacing='0' cellpadding='0'>"+
                                 "<tr>"+
@@ -415,9 +434,8 @@
             var url = URL.createObjectURL(blob);
 
             // Set file name
-            var fileName = "";
             if (!filename) {
-                fileName = filename ? filename + '.doc' : 'document.doc';
+                filename = filename ? filename + '.doc' : 'document.doc';
             }
 
             // Create download link element
@@ -425,12 +443,12 @@
             document.body.appendChild(downloadLink);
             // Check for IE 10/11
             if (navigator.msSaveOrOpenBlob) {
-                navigator.msSaveOrOpenBlob(blob, fileName);
+                navigator.msSaveOrOpenBlob(blob, filename);
             } else {
                 // Create a link to the file
                 downloadLink.href = url;
                 // Setting the file name
-                downloadLink.download = fileName;
+                downloadLink.download = filename;
                 //triggering the function
                 downloadLink.click();
             }
