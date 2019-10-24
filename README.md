@@ -1,6 +1,4 @@
-<a name="toDoc"></a>
-
-## toDoc
+# toDoc
 JavaScript library to convert HTML/Text to a Word Documnet
 
 
