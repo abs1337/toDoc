@@ -187,7 +187,7 @@
          * @public
          * @param {string} type - Specify whether the content is a Paragraph, a Page or an Image <br/> Accepts : "paragraph", "page", "image" <br/> Required
          * @param {string} content - Defines the document's content <br/> Accepts : stringified text, stringified HTML markup, stringified image URLs <br/> Required
-         * @param {number} position - Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for individual pages <br/> Required if creating individual pages <br/> Optional if passing a whole HTML document
+         * @param {number} position - Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for pagagraphs, pages and images <br/> Optional if passing a whole HTML document
          * @param {boolean} nextLine - Specifes whether the content should start in a new line <br/> Accepts : true, false <br/> Default value : false <br/> Optional
          * @memberof toDoc
          */
