@@ -1,27 +1,10 @@
 <a name="toDoc"></a>
 
-## toDoc : <code>object</code>
-Convert HTML/Text to a Word Documnet
+## toDoc
+JavaScript library to convert HTML/Text to a Word Documnet
 
-**Kind**: global namespace
 
-* [toDoc](#toDoc) : <code>object</code>
-    * [.toDoc()](#toDoc.toDoc) ⇒ <code>object</code>
-    * [.doc.createSection(sectionType, contentType, content, alignment, position, nextLine)](#toDoc.doc.createSection)
-    * [.doc.createContent(type, content, position, nextLine)](#toDoc.doc.createContent)
-    * [.doc.createDocument(fileName, params)](#toDoc.doc.createDocument)
-
-<a name="toDoc.toDoc"></a>
-
-### toDoc.toDoc() ⇒ <code>object</code>
-Master function
-
-**Kind**: static method of [<code>toDoc</code>](#toDoc)
-**Returns**: <code>object</code> - Library object with global functions
-**Access**: public
-<a name="toDoc.doc.createSection"></a>
-
-### toDoc.doc.createSection(sectionType, contentType, content, alignment, position, nextLine)
+### toDoc.createSection(sectionType, contentType, content, alignment, position, nextLine)
 Creates a Header or Footer Section in the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -38,7 +21,7 @@ Creates a Header or Footer Section in the document
 
 <a name="toDoc.doc.createContent"></a>
 
-### toDoc.doc.createContent(type, content, position, nextLine)
+### toDoc.createContent(type, content, position, nextLine)
 Creates a Paragraph or Page in the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -53,7 +36,7 @@ Creates a Paragraph or Page in the document
 
 <a name="toDoc.doc.createDocument"></a>
 
-### toDoc.doc.createDocument(fileName, params)
+### toDoc.createDocument(fileName, params)
 Generates and saves a Word document.
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
