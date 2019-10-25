@@ -20,7 +20,6 @@
          * @memberof toDoc
          */
         var oSettings = {
-            orientation: "portrait",
             pageSizeX: "8.5in",
             pageSizeY: "11in",
             marginTop: "1in",
@@ -85,7 +84,7 @@
                         var imgUrl = content;
                         sectionObj.sectionContent = getImage(imgUrl);
                     } else {
-                        console.log("invalid image url or path");
+                        console.error(content + "is not an valid value for the parameter 'content', expected image url/path: ");
                     }
                     break;
                 // Create Header Text
@@ -93,7 +92,7 @@
                     if (typeof(content) == "string" && content.length > 0) {
                         sectionObj.sectionContent = content;
                     } else {
-                        console.log("invalid text string");
+                        console.error(content + "is not an valid value for the parameter 'content', expected string");
                     }
                     break;
                 // Create Header HTML Markup
@@ -103,12 +102,12 @@
                     if (htmlRegex.test(content)) {
                         sectionObj.sectionContent = content;
                     } else {
-                        console.log("invalid html markup");
+                        console.error("Invalid HTML markup");
                     }
                     break;
                 // Error
                 default:
-                    console.log("invalid header type");
+                    console.error(contentType " is an invalid content type, expected 'image', 'string' or 'html'");
                     return;
             }
 
@@ -116,14 +115,14 @@
             if (Number.isInteger(position) && position > 0) {
                 sectionObj.sectionPosition = position;
             } else {
-                console.log("invalid header position");
+                console.error(position + " is an invalid header position, expected number");
             }
 
             // Check for Next line
             if (typeof(nextLine) == "boolean") {
                 sectionObj.sectionNextLine = nextLine;
             } else {
-                console.log("invalid nextLine parameter");
+                console.error(nextLine + " is an invalid nextLine flag, expected true or false, defaulting to false");
             }
 
             // Check Header of Footer and Set Alignment
@@ -137,7 +136,7 @@
                         } else if (alignment == "right") {
                             oData.aHeaderRight.push(sectionObj);
                         } else {
-                            console.log("invalid alignment parameter");
+                            console.error(alignment + "is an invalid alignment, expected 'left', 'center' or 'right'");
                         }
                     }
                 } else if (sectionType == "footer") {
@@ -149,11 +148,11 @@
                         } else if (alignment == "right") {
                             oData.aFooterRight.push(sectionObj);
                         } else {
-                            console.log("invalid alignment parameter");
+                            console.error(alignment + "is an invalid alignment, expected 'left', 'center' or 'right'");
                         }
                     }
                 } else {
-                    console.log("invalid header/footer parameter");
+                    console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
                 }
             }
         };
@@ -201,23 +200,36 @@
             if (type === "paragraph" || type === "page" || "image") {
                 contentType = type;
             } else {
-                console.log("invalid content type");
+                console.error(type + "is an invalid content type");
                 return;
             }
             
-            // Check for valid content position
+            // Check for valid and duplicate content position
             if (Number.isInteger(position) && position > 0) {
-                contentPosition = position;
+                if (oData.aContent.length > 0) {
+                    oData.aContent.every(function(i){
+                        if (i.hasOwnProperty("cPosition")) {
+                            if (i.cPosition = position) {
+                                console.error("Content with position: " + i.cPosition + " has already been defined");
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+                    });
+                }
+            contentPosition = position;
             } else {
-                console.log("invalid content position");
+                console.error(position + "is an invalid content position, expected type number");
                 return;
             }
+            
             
             // Check for valid page content
             if (typeof(content) == "string" && content.length > 0) {
                 cont = content;
             } else {
-                console.log("invalid page content");
+                console.error(content, "is an invalid page content, expected type string");
                 return;
             }
 
@@ -225,17 +237,7 @@
             if (typeof(nextLine) == "boolean") {
                 contentNextLine = nextLine;
             } else {
-                console.log("invalid nextLine parameter, defaulting to false");
-            }
-
-            // Check for duplicate positions *WIP*
-            if (oData.aContent.length > 0) {
-                oData.aContent.forEach(function(i){
-                    if (i.hasOwnProperty("cPosition")) {
-                        console.log("Content positions have been defined, new content must also have fixed positions")
-                        //return;
-                    }
-                });
+                console.error(nextLine "+ is an invalid nextLine flag, expected true or false, defaulting to false");
             }
 
             // Create page object and store in pages array
@@ -354,18 +356,11 @@
             if (params && !params instanceof Array) {
 
                 Object.keys(params).forEach(function(i) {
-                    if (i == "orientation") {
-                        if (!params[i] == "portrait" || !params[i] == "landscape") {
-                            console.log("invalid page orientation");
-                            return;
-                        }
-                    } else {
-                        // Check for number followed by 'cm' or 'in'
-                        var unitRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *cm$|in$/;
-                        if (!unitRegex.test(params[i])) {
-                            console.log("invalid " + i);
-                            return;
-                        }
+                    // Check for number followed by 'cm' or 'in'
+                    var unitRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *cm$|in$/;
+                    if (!unitRegex.test(params[i])) {
+                        console.error(params[i] " in an invalid value for parameter: " + i);
+                        return;
                     }
                 });
                 docParams = params;
