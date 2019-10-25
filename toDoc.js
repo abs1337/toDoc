@@ -129,7 +129,7 @@
             // Check Header of Footer and Set Alignment
             if (typeof(sectionType) == "string" && sectionType.length > 0) {
                 if (sectionType == "header") {
-                    if (typeof(nextLine) == "string" && alignment.length > 0) {
+                    if (typeof(alignment) == "string" && alignment.length > 0) {
                         if (alignment == "left") {
                             oData.aHeaderLeft.push(sectionObj);
                         } else if (alignment == "center") {
@@ -141,7 +141,7 @@
                         }
                     }
                 } else if (sectionType == "footer") {
-                    if (typeof(nextLine) == "string" && alignment.length > 0) {
+                    if (typeof(alignment) == "string" && alignment.length > 0) {
                         if (alignment == "left") {
                             oData.aFooterLeft.push(sectionObj);
                         } else if (alignment == "center") {
@@ -191,7 +191,7 @@
          * @param {boolean} nextLine - Specifes whether the content should start in a new line <br/> Accepts : true, false <br/> Default value : false <br/> Optional
          * @memberof toDoc
          */
-        doc.createContent = function(type, content, number, position, nextLine) {
+        doc.createContent = function(type, content, position, nextLine) {
             var contentPosition = 0,
                 cont = "",
                 contentType = "",
@@ -228,12 +228,12 @@
                 console.log("invalid nextLine parameter, defaulting to false");
             }
 
-            // Check for duplicate positions
+            // Check for duplicate positions *WIP*
             if (oData.aContent.length > 0) {
                 oData.aContent.forEach(function(i){
                     if (i.hasOwnProperty("cPosition")) {
                         console.log("Content positions have been defined, new content must also have fixed positions")
-                        return;
+                        //return;
                     }
                 });
             }
@@ -413,7 +413,7 @@
                     //Content
                     "<div class='Section1'>"+ // Section1
                         //Pages 
-                        getPages() +
+                        getContents() +
                         //Header and Footer
                         "<table id='hrdftrtbl' border='1' cellspacing='0' cellpadding='0'>"+
                             "<tr>"+
