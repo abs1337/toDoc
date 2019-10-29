@@ -186,26 +186,85 @@
         /** 
          * Creates a Paragraph or Page in the document
          * @public
-         * @param {string} type - Specify whether the content is a Paragraph, a Page or an Image <br/> Accepts : "paragraph", "page", "image" <br/> Required
+         * @param {string} type - Specify whether the content is a Paragraph, a Page or an Image <br/> Accepts : "paragraph", "image", "page" <br/> Required
          * @param {string} content - Defines the document's content <br/> Accepts : stringified text, stringified HTML markup, stringified image URLs <br/> Required
          * @param {number} position - Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for pagagraphs, pages and images <br/> Optional if passing a whole HTML document
          * @param {boolean} nextLine - Specifes whether the content should start in a new line <br/> Accepts : true, false <br/> Default value : false <br/> Optional
          * @memberof toDoc
          */
         doc.createContent = function(type, content, position, nextLine) {
-            var contentPosition = 0,
-                cont = "",
+            var cont = "", 
+                contentPosition = 0,
                 contentType = "",
                 contentNextLine = false;
 
-            // Check for valid content type
-            if (type === "paragraph" || type === "page" || "image") {
-                contentType = type;
-            } else {
-                console.error(type + "is an invalid content type");
-                return;
+            var contentObj = {
+                "cContent": cont,
+                "cPosition": contentPosition,
+                "cType" : contentType,
+                "cNextLine": contentNextLine
+            };
+
+            switch (type) {
+                // Create Header Image
+                case "image":
+                    var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+                    // Check for valid URL
+                    if (urlRegex.test(content)) {
+                        var imgUrl = content;
+                        getImage(imgUrl, function(imgString){
+                            contentObj.cContent = imgString;
+                            contentObj.cType = type;
+                        });
+                    } else {
+                        console.error(content + "is not an valid value for the parameter 'content', expected image url/path");
+                        return;
+                    }
+                    break;
+                // Create Header Text
+                case "paragraph":
+                    if (typeof(content) == "string" && content.length > 0) {
+                        contentObj.cContent = content;
+
+                        // Check for HTML markup
+                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
+                        if (htmlRegex.test(content)) {
+                            contentObj.cType = "html";
+                        } else {
+                            contentObj.cType = type;
+                        }
+
+                    } else {
+                        console.error(content + "is not an valid value for the parameter 'content', expected string");
+                        return;
+                    }
+                    break;
+                // Create  Markup
+                case "page":
+                    
+                    if (typeof(content) == "string" && content.length > 0) {
+                        contentObj.cContent = content;
+
+                        // Check for HTML markup
+                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
+                        if (htmlRegex.test(content)) {
+                            contentObj.cType = "html_page";
+                        } else {
+                            contentObj.cType = type;
+                        }
+
+                    } else {
+                        console.error(content + "is not an valid value for the parameter 'content', expected string");
+                        return;
+                    }
+
+                    break;
+                // Error
+                default:
+                    console.error(contentType + " is an invalid content type, expected 'image', 'string' or 'html'");
+                    return;
             }
-            
+
             // Check for valid and duplicate content position
             if (Number.isInteger(position) && position > 0) {
                 if (oData.aContent.length > 0) {
@@ -220,54 +279,22 @@
                         }
                     });
                 }
-            contentPosition = position;
+                contentObj.cPosition = position; // Check for relocaton
             } else {
                 console.error(position + "is an invalid content position, expected type number");
                 return;
             }
             
-            
-            // Check for valid page content
-            if (type === "image") {
-                var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-                // Check for valid URL
-                if (urlRegex.test(content)) {
-                    getImage(content, function(imgString){
-                        cont = imgString
-                    });
-                    //cont = getImage(content);
-                } else {
-                    console.error(content + "is not an valid value for the parameter 'content', expected image url/path");
-                }
-            } else if (typeof(content) == "string" && content.length > 0) {
-                cont = content;
+            // Check for Next line
+            if (typeof(nextLine) == "boolean") {
+                contentObj.cNextLine = nextLine;
             } else {
-                console.error(content, "is an invalid page content, expected type string");
+                console.error(nextLine + " is an invalid nextLine flag, expected true or false, defaulting to false");
                 return;
             }
 
-            // Check for Next line
-            if (typeof(nextLine) == "boolean") {
-                contentNextLine = nextLine;
-            } else {
-                console.error(nextLine + " is an invalid nextLine flag, expected true or false, defaulting to false");
-            }
-
-            // Create page object and store in pages array
-            if (contentPosition != 0 && cont != "") {
-                var contentObj = {
-                    "cPosition": contentPosition,
-                    "cContent": cont,
-                    "cType" : contentType,
-                    "cNextLine": contentNextLine
-                };
-                oData.aContent.push(contentObj);
-            } else if (!contentPosition && cont != "") {
-                var contentObj = {
-                    "cPosition": contentPosition,
-                };
-                oData.aContent.push(contentObj);
-            }
+            // Push to array with other contents
+            oData.aContent.push(contentObj);
         };
 
         /** 
