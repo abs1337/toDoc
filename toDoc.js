@@ -209,7 +209,7 @@
                 if (oData.aContent.length > 0) {
                     oData.aContent.every(function(i){
                         if (i.hasOwnProperty("cPosition")) {
-                            if (i.cPosition = position) {
+                            if (i.cPosition == position) {
                                 console.error("Content with position: " + i.cPosition + " has already been defined");
                                 return false;
                             } else {
@@ -315,30 +315,40 @@
          */
         var getImage = function(url) {
             var image = new Image();
-            image.src = url;
-            
-            // Set image to canvas to get data URL
-            if (image != null && (image.width && image.height)) {
+            image.crossOrigin = "anonymous"
 
-                var imgCanvas = document.createElement("canvas"),
-                    imgContext = imgCanvas.getContext("2d");
+            // run only after image loads
+            image.onload = function() {
 
-                // Make sure canvas is as big as the picture
-                imgCanvas.width = image.width;
-                imgCanvas.height = image.height;
+                var nHeight = image.height;
+                var nWidth = image.width;
 
-                // Draw image into canvas element
-                imgContext.drawImage(image, 0, 0, image.width, image.height);
+                // Set image to canvas to get data URL
+                if (image != null && (nWidth && nHeight)) {
 
-                // Get canvas contents as a data URL
-                var imgAsDataURL = imgCanvas.toDataURL("image/png");
+                    var imgCanvas = document.createElement("canvas"),
+                        imgContext = imgCanvas.getContext("2d");
 
-                // Return data URL in HTML tags
-                return "<img src='" + imgAsDataURL + "'></img>";
-            } else {
-                console.error("cannot reach image url");
-                return "";
+                    // Make sure canvas is as big as the picture
+                    imgCanvas.width = image.width;
+                    imgCanvas.height = image.height;
+
+                    // Draw image into canvas element
+                    imgContext.drawImage(image, 0, 0, image.width, image.height);
+
+                    // Get canvas contents as a data URL
+                    var imgAsDataURL = imgCanvas.toDataURL("image/png");
+
+                    // Return data URL in HTML tags
+                    return "<img src='" + imgAsDataURL + "'></img>";
+                } else {
+                    console.error("cannot reach image url");
+                    return "";
+                }
             }
+
+            // set image source
+            image.src = url;
         };
 
 
