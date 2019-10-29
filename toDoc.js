@@ -84,7 +84,7 @@
                         var imgUrl = content;
                         sectionObj.sectionContent = getImage(imgUrl);
                     } else {
-                        console.error(content + "is not an valid value for the parameter 'content', expected image url/path: ");
+                        console.error(content + "is not an valid value for the parameter 'content', expected image url/path");
                     }
                     break;
                 // Create Header Text
@@ -127,25 +127,25 @@
 
             // Check Header of Footer and Set Alignment
             if (typeof(sectionType) == "string" && sectionType.length > 0) {
-                if (sectionType == "header") {
+                if (sectionType === "header") {
                     if (typeof(alignment) == "string" && alignment.length > 0) {
-                        if (alignment == "left") {
+                        if (alignment === "left") {
                             oData.aHeaderLeft.push(sectionObj);
-                        } else if (alignment == "center") {
+                        } else if (alignment === "center") {
                             oData.aHeaderCenter.push(sectionObj);
-                        } else if (alignment == "right") {
+                        } else if (alignment === "right") {
                             oData.aHeaderRight.push(sectionObj);
                         } else {
                             console.error(alignment + "is an invalid alignment, expected 'left', 'center' or 'right'");
                         }
                     }
-                } else if (sectionType == "footer") {
+                } else if (sectionType === "footer") {
                     if (typeof(alignment) == "string" && alignment.length > 0) {
-                        if (alignment == "left") {
+                        if (alignment === "left") {
                             oData.aFooterLeft.push(sectionObj);
-                        } else if (alignment == "center") {
+                        } else if (alignment === "center") {
                             oData.aFooterCenter.push(sectionObj);
-                        } else if (alignment == "right") {
+                        } else if (alignment === "right") {
                             oData.aFooterRight.push(sectionObj);
                         } else {
                             console.error(alignment + "is an invalid alignment, expected 'left', 'center' or 'right'");
@@ -203,6 +203,14 @@
                 console.error(type + "is an invalid content type");
                 return;
             }
+
+            if (type === "image") {
+                var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+                // Check for valid URL
+                if (!urlRegex.test(content)) {
+                    console.error(content + "is not an valid value for the parameter 'content', expected image url/path");
+                }
+            }
             
             // Check for valid and duplicate content position
             if (Number.isInteger(position) && position > 0) {
@@ -210,7 +218,7 @@
                     oData.aContent.every(function(i){
                         if (i.hasOwnProperty("cPosition")) {
                             if (i.cPosition == position) {
-                                console.error("Content with position: " + i.cPosition + " has already been defined");
+                                console.error("Content with position: " + i.cPosition + " has already been defined, enter new position for " + content);
                                 return false;
                             } else {
                                 return true;
@@ -281,15 +289,15 @@
                 content.forEach(function(i, index) {
 
                     // Stitch markup based on content type
-                    if (i.cType = "paragraph") {
+                    if (i.cType === "paragraph") {
 
                         contentString = contentString + oData.paraStart + i.cContent + oData.paraEnd;
 
-                    } else if (i.cType = "page") {
+                    } else if (i.cType === "page") {
 
                         contentString = oData.pageBreak + contentString + i.cContent;
 
-                    } else if (i.cType = "image") {
+                    } else if (i.cType === "image") {
 
                         contentString = contentString + oData.break + getImage(i.cContent) + oData.break;
                     }
@@ -340,7 +348,7 @@
                     var imgAsDataURL = imgCanvas.toDataURL("image/png");
 
                     // Return data URL in HTML tags
-                    return "<img src='" + imgAsDataURL + "'></img>";
+                    return "<img src='" + imgAsDataURL + "' crossOrigin='anonymous'></img>";
                 } else {
                     console.error("cannot reach image url");
                     return "";
