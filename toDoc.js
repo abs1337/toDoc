@@ -107,7 +107,7 @@
                     break;
                 // Error
                 default:
-                    console.error(contentType " is an invalid content type, expected 'image', 'string' or 'html'");
+                    console.error(contentType + " is an invalid content type, expected 'image', 'string' or 'html'");
                     return;
             }
 
@@ -237,7 +237,7 @@
             if (typeof(nextLine) == "boolean") {
                 contentNextLine = nextLine;
             } else {
-                console.error(nextLine "+ is an invalid nextLine flag, expected true or false, defaulting to false");
+                console.error(nextLine + " is an invalid nextLine flag, expected true or false, defaulting to false");
             }
 
             // Create page object and store in pages array
@@ -336,7 +336,7 @@
                 // Return data URL in HTML tags
                 return "<img src='" + imgAsDataURL + "'></img>";
             } else {
-                // Return blank is error
+                console.error("cannot reach image url");
                 return "";
             }
         };
@@ -359,7 +359,7 @@
                     // Check for number followed by 'cm' or 'in'
                     var unitRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *cm$|in$/;
                     if (!unitRegex.test(params[i])) {
-                        console.error(params[i] " in an invalid value for parameter: " + i);
+                        console.error(params[i] + " in an invalid value for parameter: " + i);
                         return;
                     }
                 });
