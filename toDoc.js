@@ -106,9 +106,9 @@
             if (!size) {
                 sectionObj.sSize = "16px";
             } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
-                sectionObj.iWidth = size;
+                sectionObj.sSize = size;
             } else {
-                console.error(sSize + " is an invalid header position, expected number");
+                console.error(size + " is an invalid header position, expected number");
                 return;
             }
 
@@ -186,7 +186,7 @@
             if (sections.length > 0) {
                 sections.forEach(function(i) {
                     if (i.sContentType === "text") {
-                        sectionString = sectionString + "<p align='" + i.sAlign + "' style='font-size : '" + i.sSize + "; font-family : " + i.sFont + ", Times New Roman;'>" + i.sContent + oData.paraEnd;
+                        sectionString = sectionString + "<p align='" + i.sAlign + "' style='font-size : " + i.sSize + "; font-family : " + i.sFont + ", Times New Roman;'>" + i.sContent + oData.paraEnd;
                     } else if (i.sContentType === "image" || i.sContentType === "html") {
                         sectionString = sectionString + i.sContent;
                     }
@@ -256,11 +256,11 @@
             // Validate and set font size
             var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                sectionObj.sSize = "16px";
+                sectionObj.cSize = "16px";
             } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
-                sectionObj.iWidth = size;
+                sectionObj.cSize = size;
             } else {
-                console.error(sSize + " is an invalid header position, expected number");
+                console.error(size + " is an invalid header position, expected number");
                 return;
             }
 
@@ -346,7 +346,7 @@
                     // Stitch markup based on content type
                     if (i.cType === "paragraph") {
 
-                        sectionString = sectionString + "<p align='" + i.cAlign + "' style='font-size : '" + i.cSize + "; font-family : " + i.cFont + ", Times New Roman;'>" + i.cContent + oData.paraEnd;
+                        sectionString = sectionString + "<p align='" + i.cAlign + "' style='font-size : " + i.cSize + "; font-family : " + i.cFont + ", Times New Roman;'>" + i.cContent + oData.paraEnd;
 
                     } else if (i.cType === "page") {
 
@@ -405,6 +405,8 @@
                 "cPosition": 0,
                 "cType": "",
                 "cAlign": "",
+                "cSize": "",
+                "cFont": "",
                 "iAlign": "",
                 "iWidth": "",
                 "iHeight": "",
@@ -588,9 +590,9 @@
             if (!size) {
                 sectionObj.sSize = "16px";
             } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
-                sectionObj.iWidth = size;
+                sectionObj.sSize = size;
             } else {
-                console.error(sSize + " is an invalid header position, expected number");
+                console.error(size + " is an invalid header position, expected number");
                 return;
             }
 
