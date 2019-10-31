@@ -256,9 +256,9 @@
             // Validate and set font size
             var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                sectionObj.cSize = "16px";
+                contentObj.cSize = "16px";
             } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
-                sectionObj.cSize = size;
+                contentObj.cSize = size;
             } else {
                 console.error(size + " is an invalid header position, expected number");
                 return;
@@ -266,9 +266,9 @@
 
             // Validate and set font face
             if (!font) {
-                contentObj.sFont = "";
+                contentObj.cFont = "";
             } else if (font && typeof(font) == "string") {
-                contentObj.sFont = font;
+                contentObj.cFont = font;
             } else {
                 console.error(font + " is an invalid header position, expected number");
                 return;
@@ -346,7 +346,7 @@
                     // Stitch markup based on content type
                     if (i.cType === "paragraph") {
 
-                        sectionString = sectionString + "<p align='" + i.cAlign + "' style='font-size : " + i.cSize + "; font-family : " + i.cFont + ", Times New Roman;'>" + i.cContent + oData.paraEnd;
+                        contentString = contentString + "<p align='" + i.cAlign + "' style='font-size : " + i.cSize + "; font-family : " + i.cFont + ", Times New Roman;'>" + i.cContent + oData.paraEnd;
 
                     } else if (i.cType === "page") {
 
@@ -426,6 +426,16 @@
                 return;
             }
 
+            // Validate and set position
+            if (!position) {
+                imageObj.sPosition = 0;
+            } else if (position && Number.isInteger(position) && position > 0) {
+                imageObj.sPosition = position;
+            } else {
+                console.error(position + " is an invalid header position, expected number");
+                return;
+            }
+
             // Validate and set alignment
             if (!align) {
                 imageObj.sAlign = "left";
@@ -435,16 +445,6 @@
                 imageObj.iAlign = align;
             } else {
                 console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
-                return;
-            }
-
-            // Validate and set position
-            if (!position) {
-                imageObj.sPosition = 0;
-            } else if (position && Number.isInteger(position) && position > 0) {
-                imageObj.sPosition = position;
-            } else {
-                console.error(position + " is an invalid header position, expected number");
                 return;
             }
 
@@ -471,18 +471,18 @@
             // Validate URL and create image
             var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
             // Check for valid URL
-            if (urlRegex.test(content)) {
-                var imgUrl = content,
+            if (urlRegex.test(imageURL)) {
+                var imgUrl = imageURL,
                     imgAlign = imageObj.iAlign,
                     imgHeight = imageObj.iWidth,
                     imgWidth = imageObj.iHeight;
                 // Get image as DATA URL
                 getImage(imgUrl, imgAlign, imgWidth, imgHeight, function(imgMarkup) {
                     imageObj.sContent = imgMarkup;
-                    imageObj.sContentType = contentType;
+                    imageObj.cType = "image";
                 });
             } else {
-                console.error(content + "is not an valid value for the parameter 'content', expected image url/path");
+                console.error(imageURL + "is not an valid value for the parameter 'imageURL', expected image url/path");
                 return;
             }
 
@@ -546,8 +546,36 @@
                     return "";
                 }
             }
+
+            
             // set image source
-            image.src = url;
+
+            //image.src = url;
+
+
+
+            // Try Handling CORS error.
+            var request = new XMLHttpRequest();
+            request.open("GET", url);
+            request.onload = request.onerror = function() {
+                for (var responseText = x.responseText, responseTextLen = responseText.length, binary = "", i = 0; i < responseTextLen; ++i) {
+                  binary += String.fromCharCode(responseText.charCodeAt(i) & 255)
+                }
+                var src = 'data:image/jpeg;base64,'+ window.btoa(binary);
+
+                var imgHTML = "<div align='" + imgAlign + "'><img width='" + imgWidth + "' height='" + imgHeight + "' src='" + src + "' crossOrigin='anonymous'></img>"
+
+                // Return data URL in HTML tags
+                if (callBack) {
+                    callBack(imgHTML);
+                } else {
+                    return imgHTML;
+                }
+            };
+
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            request.send("");
         };
 
         /** 
