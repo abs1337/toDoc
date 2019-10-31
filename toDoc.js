@@ -50,7 +50,8 @@
             paraEnd: "</p>",
             fontStart: "<font size='1'>",
             fontEnd: "</font>",
-            pageNumber1: "<p align='center' style='margin : 0;''><font size='1'> Page <span style='mso-field-code: PAGE '></span> of <span style='mso-field-code: NUMPAGES '></span> </font></p>"
+            pageNum_1: " <span style='mso-field-code: PAGE '></span>",
+            pageNum_2: " Page <span style='mso-field-code: PAGE '></span> of <span style='mso-field-code: NUMPAGES '></span>",
         };
 
         /** 
@@ -161,6 +162,36 @@
                 console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
                 return;
             }
+        };
+
+        /** 
+         * Stitch sections during document generation
+         * @private
+         * @returns {string} Returns stringified markup of header and footer content
+         * @memberof toDoc
+         */
+        var getSection = function(sectionArray) {
+            var sections = sectionArray;
+            var sectionString = "";
+            // Sort by ascending position
+            if (sections.length > 1) {
+                sections.sort(function(a, b) {
+                    var posA = a["cPosition"];
+                    var posB = b["cPosition"];
+                    return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
+                });
+            }
+            // Stich section elements together
+            if (sections.length > 0) {
+                sections.forEach(function(i) {
+                    if (i.sContentType === "text") {
+                        sectionString = sectionString + "<p align='" + i.sAlign + "'>" + "<font size='" + i.sSize + "' face ='" + i.sFont + "'>" + i.sContent + oData.fontEnd + oData.paraEnd;
+                    } else if (i.sContentType === "image" || i.sContentType === "html") {
+                        sectionString = sectionString + i.sContent;
+                    }
+                });
+            }
+            return sectionString;
         };
 
         /** 
@@ -288,6 +319,60 @@
         };
 
         /** 
+         * Stitch Page during document generation
+         * @private
+         * @returns {string} Returns stringified markup of all pages
+         * @memberof toDoc
+         */
+        var getContents = function() {
+            var content = oData.aContent;
+
+            // Sort by ascending position
+            if (content.length > 1) {
+                content.sort(function(a, b) {
+                    var posA = a["cPosition"];
+                    var posB = b["cPosition"];
+                    return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
+                });
+            }
+
+            // Stitch content together
+            if (content.length > 0) {
+                var contentString = "";
+                content.forEach(function(i, index) {
+
+                    // Stitch markup based on content type
+                    if (i.cType === "paragraph") {
+
+                        contentString = contentString + "<p align='" + i.cAlign + "'>" + "<font size='" + i.cSize + "' face ='" + i.cFont + "'>" + i.cContent + oData.fontEnd + oData.paraEnd;
+
+                    } else if (i.cType === "page") {
+
+                        contentString = oData.pageBreak + contentString + i.cContent;
+
+                    } else if (i.cType === "image" || i.cType === "html") {
+
+                        contentString = contentString + oData.break+i.cContent + oData.break;
+
+                    } else if (i.cType === "html_page") {
+
+                        contentString = oData.pageBreak + contentString + i.cContent;
+
+                    }
+
+                    // Create content in next line
+                    if (i.contentNextLine) {
+                        contentString = contentString + oData.break;
+                    }
+
+                });
+                return contentString;
+            } else {
+                return "";
+            }
+        };
+
+        /** 
          * Creates an image in the Header, Footer or Body  of the document
          * @public
          * @param {string} sectionType - Specifies where the image is inserted in the document <br/> Accepts : "header", "footer", "body" <br/> Required
@@ -408,91 +493,6 @@
         };
 
         /** 
-         * Stitch sections during document generation
-         * @private
-         * @returns {string} Returns stringified markup of header and footer content
-         * @memberof toDoc
-         */
-        var getSection = function(sectionArray) {
-            var sections = sectionArray;
-            var sectionString = "";
-            // Sort by ascending position
-            if (sections.length > 1) {
-                sections.sort(function(a, b) {
-                    var posA = a["cPosition"];
-                    var posB = b["cPosition"];
-                    return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
-                });
-            }
-            // Stich section elements together
-            if (sections.length > 0) {
-                sections.forEach(function(i) {
-                    if (i.sContentType === "text") {
-                        sectionString = sectionString + "<p align='" + i.sAlign + "'>" + "<font size='" + i.sSize + "' face ='" + i.sFont + "'>" + i.sContent + oData.fontEnd + oData.paraEnd;
-                    } else if (i.sContentType === "image" || i.sContentType === "html") {
-                        sectionString = sectionString + i.sContent;
-                    }
-                });
-            }
-            return sectionString;
-        };
-
-        /** 
-         * Stitch Page during document generation
-         * @private
-         * @returns {string} Returns stringified markup of all pages
-         * @memberof toDoc
-         */
-        var getContents = function() {
-            var content = oData.aContent;
-
-            // Sort by ascending position
-            if (content.length > 1) {
-                content.sort(function(a, b) {
-                    var posA = a["cPosition"];
-                    var posB = b["cPosition"];
-                    return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
-                });
-            }
-
-            // Stitch content together
-            if (content.length > 0) {
-                var contentString = "";
-                content.forEach(function(i, index) {
-
-                    // Stitch markup based on content type
-                    if (i.cType === "paragraph") {
-
-                        contentString = contentString + "<p align='" + i.cAlign + "'>" + "<font size='" + i.cSize + "' face ='" + i.cFont + "'>" + i.cContent + oData.fontEnd + oData.paraEnd;
-                    
-                    } else if (i.cType === "page") {
-
-                        contentString = oData.pageBreak + contentString + i.cContent;
-
-                    } else if (i.cType === "image" || i.cType === "html") {
-
-                        contentString = contentString + oData.break+i.cContent + oData.break;
-
-                    } else if (i.cType === "html_page") {
-
-                        contentString = oData.pageBreak + contentString + i.cContent;
-
-                    }
-
-                    // Create content in next line
-                    if (i.contentNextLine) {
-                        contentString = contentString + oData.break;
-                    }
-
-                });
-                return contentString;
-            } else {
-                return "";
-            }
-        };
-
-
-        /** 
          * Creates and stores an image as a local data URL from image's URL
          * @private
          * @param {string} url - URL or path of the image
@@ -545,6 +545,86 @@
             // set image source
             image.src = url;
         };
+
+        /** 
+         * Inserts page number in specified section of the document
+         * @public
+         * @param {string} sectionType - Specifies where the image is inserted in the document <br/> Accepts : "header", "footer", "body" <br/> Required
+         * @param {number} format - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional
+         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right" <br/> Default alignment: left <br/> Optional
+         * @param {number} size - Specify <br/> Default size: "" <br/> Optional
+         * @param {string} font - Specify <br/> Default font: Times New Roman <br/> Optional
+         * @memberof toDoc
+         */
+        doc.createPagenum = function(sectionType, format, align, size, font) {
+
+            // Store section data and settings
+            var sectionObj = {
+                "sContentType": "",
+                "sContent": "",
+                "sPosition": 0,
+                "sAlign": "",
+                "sSize": "",
+                "sFont": "",
+                "iAlign": "",
+                "iWidth": "",
+                "iHeight": "",
+            };
+
+            // Validate and set alignment
+            if (!align) {
+                sectionObj.sAlign = "left";
+            } else if (align && (align === "left" || align === "center" || align === "right")) {
+                sectionObj.sAlign = align;
+            } else {
+                console.error(align + " is an invalid alignment for image, expected 'left', 'center' or 'right'");
+                return;
+            }
+
+            // Validate text's font size
+            if (!size) {
+                sectionObj.sSize = "";
+            } else if (size && Number.isInteger(size) && size > 0) {
+                sectionObj.iWidth = size;
+            } else {
+                console.error(sSize + " is an invalod font size, expected number");
+                return;
+            }
+
+            // Validate text's font face
+            if (!font) {
+                sectionObj.sFont = "";
+            } else if (font && typeof(font) == "string") {
+                sectionObj.sFont = font;
+            } else {
+                console.error(font + " is an invalid font style");
+                return;
+            }
+
+            // Format page number
+            if (!format || format === 1) {
+                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "'>" + "<font size='" + sectionObj.sSize + "' face ='" + sectionObj.sFont + "'>" + oData.pageNum_1 + oData.fontEnd + oData.paraEnd;
+            } else if (format === 2) {
+                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "'>" + "<font size='" + sectionObj.sSize + "' face ='" + sectionObj.sFont + "'>" + oData.pageNum_2 + oData.fontEnd + oData.paraEnd;
+            } else {
+                console.error(format + " is an invalid format for page numbers, expected number 1/2");
+                return; 
+            }
+
+            // Insert page number in specified section and push to respestive array
+            if (sectionType.length > 0 && typeof(sectionType) == "string" && (sectionType === "header" || sectionType === "footer")) {
+                if (sectionType === "header") {
+                    oData.aHeader.push(sectionObj);
+                } else if (sectionType === "footer") {
+                    oData.aFooter.push(sectionObj);
+                }
+            } else {
+                console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
+                return;
+            }
+
+        };
+
 
         /** 
          * Clears all section and content data
