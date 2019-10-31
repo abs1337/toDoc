@@ -10,7 +10,7 @@ Creates a Header or Footer Section in the document
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sectionType | <code>string</code> | Defines whether the section is a header or footer <br/> Accepts : "header" <code>&#124; "footer" <br/> Required |
+| sectionType | <code>string</code> | Defines whether the section is a header or footer <br/> Accepts : "header" &#124; "footer" <br/> Required |
 | contentType | <code>string</code> | Defines whether the section contains an image, text or HTML markup <br/> Accepts : "image", "text", "html" <br/> Required |
 | content | <code>string</code> | Defines the sections's content <br/> Accepts : stringified image URLs, stringified text, stringified HTML markup <br/> Required |
 | alignment | <code>string</code> | Defines the section content's alignemnt <br/> Accepts : "left", "center", "right" <br/> Required |
