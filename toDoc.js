@@ -14,7 +14,7 @@
     function toDoc() {
         var doc = {};
 
-        /** 
+        /**
          * Store default document settings
          * @private
          * @memberof toDoc
@@ -59,13 +59,13 @@
          * @param {string} sectionType - Defines whether the section is a header or footer <br/> Accepts : "header", "footer" <br/> Required
          * @param {string} contentType - Defines whether the section text or stringified HTML markup <br/> Accepts : "text", "html" <br/> Required
          * @param {string} content - Defines the sections's content <br/> Accepts : stringified text, stringified HTML markup <br/> Required
-         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
          * @param {number} position - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default position: 0 <br/> Optional
+         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
          * @param {number} size - Specify <br/> Default size: "" <br/> Optional
          * @param {string} font - Specify <br/> Default font: Times New Roman <br/> Optional
          * @memberof toDoc
          */
-        doc.createSection = function(sectionType, contentType, content, align, position, size, font) {
+        doc.createSection = function(sectionType, contentType, content, position, align, size, font) {
 
             // Store section data and settings
             var sectionObj = {
@@ -80,18 +80,6 @@
                 "iHeight": "",
             };
 
-            // Validate and set alignment
-            if (!align) {
-                sectionObj.sAlign = "left";
-                sectionObj.iAlign = "left";
-            } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
-                sectionObj.sAlign = align;
-                sectionObj.iAlign = align;
-            } else {
-                console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
-                return;
-            }
-
             // Validate and set position
             if (!position) {
                 sectionObj.sPosition = 0;
@@ -99,6 +87,16 @@
                 sectionObj.sPosition = position;
             } else {
                 console.error(position + " is an invalid header position, expected number");
+                return;
+            }
+
+            // Validate and set alignment
+            if (!align) {
+                sectionObj.sAlign = "left";
+            } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
+                sectionObj.sAlign = align;
+            } else {
+                console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
                 return;
             }
 
@@ -134,7 +132,7 @@
                         return;
                     }
                     break;
-                // Create Header HTML Markup
+                    // Create Header HTML Markup
                 case "html":
                     var htmlRegex = /<\/?[a-z][\s\S]*>/i;
                     // Check for valid HTML
@@ -146,109 +144,10 @@
                         return;
                     }
                     break;
-                // Error
+                    // Error
                 default:
                     console.error(contentType + " is an invalid content type, expected 'string' or 'html'");
                     return;
-            }
-
-            // Create section based on type - Header / Footer and push to respestive array
-            if (sectionType.length > 0 && typeof(sectionType) == "string" && (sectionType === "header" || sectionType === "footer")) {
-                if (sectionType === "header") {
-                    oData.aHeader.push(sectionObj);
-                } else if (sectionType === "footer") {
-                    oData.aFooter.push(sectionObj);
-                }                    
-            } else {
-                console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
-                return;
-            }
-        };
-
-        /** 
-         * Creates an image in the Header or Footer Section of the document
-         * @public
-         * @param {string} sectionType - Defines whether the section is a header or footer <br/> Accepts : "header", "footer" <br/> Required
-         * @param {string} imageURL - Defines the sections's content <br/> Accepts : stringified image URLs, stringified text, stringified HTML markup <br/> Required
-         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
-         * @param {number} position - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional
-         * @param {number} imageWidth - Specify custom width for images <br/> Only works for type: "image" <br/> Optional
-         * @param {number} imageHeight - Specify custom height for images <br/> Only works for type: "image" <br/> Optional
-         * @memberof toDoc
-         */
-        doc.createSectionImage = function(sectionType, imageURL, align, position, imageWidth, imageHeight) {
-
-            // Store section data and settings
-            var sectionObj = {
-                "sContentType": "",
-                "sContent": "",
-                "sPosition": 0,
-                "sAlign": "",
-                "sSize": "",
-                "sFont": "",
-                "iAlign": "",
-                "iWidth": "",
-                "iHeight": "",
-            };
-
-            // Validate and set alignment
-            if (!align) {
-                sectionObj.sAlign = "left";
-                sectionObj.iAlign = "left";
-            } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
-                sectionObj.sAlign = align;
-                sectionObj.iAlign = align;
-            } else {
-                console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
-                return;
-            }
-
-            // Validate and set position
-            if (!position) {
-                sectionObj.sPosition = 0;
-            } else if (position && Number.isInteger(position) && position > 0) {
-                sectionObj.sPosition = position;
-            } else {
-                console.error(position + " is an invalid header position, expected number");
-                return;
-            }
-
-            // Validate and set image width
-            if (!imageWidth) {
-                sectionObj.iWidth = "";
-            } else if (imageWidth && Number.isInteger(imageWidth) && imageWidth > 0) {
-                sectionObj.iWidth = imageWidth;
-            } else {
-                console.error(imageWidth + " is an invalid header position, expected number");
-                return;
-            }
-
-            // Validate and set image height
-            if (!imageHeight) {
-                sectionObj.iHeight = "";
-            } else if (imageHeight && Number.isInteger(imageHeight) && imageHeight > 0) {
-                sectionObj.iHeight = imageHeight;
-            } else {
-                console.error(imageHeight + " is an invalid header position, expected number");
-                return;
-            }
-
-            // Validate URL and create image
-            var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-            // Check for valid URL
-            if (urlRegex.test(content)) {
-                var imgUrl = content,
-                    imgAlign = sectionObj.iAlign,
-                    imgHeight = sectionObj.iWidth,
-                    imgWidth = sectionObj.iHeight;
-                // Get image as DATA URL
-                getImage(imgUrl, imgAlign, imgWidth, imgHeight, function(imgMarkup) {
-                    sectionObj.sContent = imgMarkup;
-                    sectionObj.sContentType = contentType;
-                });
-            } else {
-                console.error(content + "is not an valid value for the parameter 'content', expected image url/path");
-                return;
             }
 
             // Create section based on type - Header / Footer and push to respestive array
@@ -265,6 +164,250 @@
         };
 
         /** 
+         * Creates a Paragraph or Page in the document
+         * @public
+         * @param {string} type - Specify whether the content is a Paragraph or Page <br/> Accepts : "paragraph", "page" <br/> Required
+         * @param {string} content - Defines the document's content <br/> Accepts : stringified text, stringified HTML markup <br/> Required
+         * @param {number} position - Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document
+         * @param {string} align - Defines the content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
+         * @param {number} size - Specify <br/> Default size: "" <br/> Optional
+         * @param {string} font - Specify <br/> Default font: Times New Roman <br/> Optional
+         * @memberof toDoc
+         */
+        doc.createContent = function(type, content, position, align, size, font) {
+
+            var contentObj = {
+                "cContent": "",
+                "cPosition": 0,
+                "cType": "",
+                "cAlign": "",
+                "cSize": "",
+                "cFont": "",
+                "iAlign": "",
+                "iWidth": "",
+                "iHeight": "",
+            };
+
+            // Validate and set position
+            if (!position) {
+                contentObj.sPosition = 0;
+            } else if (position && Number.isInteger(position) && position > 0) {
+                // Check for duplicate content position
+                if (oData.aContent.length > 0) {
+                    oData.aContent.every(function(i) {
+                        if (i.hasOwnProperty("cPosition")) {
+                            if (i.cPosition == position) {
+                                console.error("Content with position: " + i.cPosition + " has already been defined, enter new position for " + content);
+                                return false;
+                            } else {
+                                contentObj.sPosition = position;
+                                return true;
+                            }
+                        }
+                    });
+                }
+            } else {
+                console.error(position + " is an invalid header position, expected number");
+                return;
+            }
+
+            // Validate and set alignment
+            if (!align) {
+                contentObj.cAlign = "left";
+            } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
+                contentObj.cAlign = align;
+            } else {
+                console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
+                return;
+            }
+
+            // Validate text's font size
+            if (!size) {
+                contentObj.sSize = "";
+            } else if (size && Number.isInteger(size) && size > 0) {
+                contentObj.iWidth = size;
+            } else {
+                console.error(sSize + " is an invalid header position, expected number");
+                return;
+            }
+
+            // Validate text's font face
+            if (!font) {
+                contentObj.sFont = "";
+            } else if (font && typeof(font) == "string") {
+                contentObj.sFont = font;
+            } else {
+                console.error(font + " is an invalid header position, expected number");
+                return;
+            }
+
+            switch (type) {
+
+                // Create a Paragraph with text or HTML markup
+                case "paragraph":
+                    if (typeof(content) == "string" && content.length > 0) {
+                        contentObj.cContent = content;
+                        // Check if content is Text or HTML markup
+                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
+                        if (htmlRegex.test(content)) {
+                            contentObj.cType = "html";
+                        } else {
+                            contentObj.cType = type;
+                        }
+                    } else {
+                        console.error(content + " is not an valid value for the parameter 'content', expected string");
+                        return;
+                    }
+                    break;
+
+                    // Create a page with HTML markup
+                case "page":
+                    if (typeof(content) == "string" && content.length > 0) {
+                        contentObj.cContent = content;
+                        // Check for HTML markup
+                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
+                        if (htmlRegex.test(content)) {
+                            contentObj.cType = "html_page";
+                        } else {
+                            contentObj.cType = type;
+                        }
+                    } else {
+                        console.error(content + "is not an valid value for the parameter 'content', expected string");
+                        return;
+                    }
+                    break;
+
+                    // Error
+                default:
+                    console.error(type + " is an invalid content type, expected 'image', 'string' or 'html'");
+                    return;
+            }
+
+            // Push to array with other contents
+            oData.aContent.push(contentObj);
+        };
+
+        /** 
+         * Creates an image in the Header, Footer or Body  of the document
+         * @public
+         * @param {string} sectionType - Specifies where the image is inserted in the document <br/> Accepts : "header", "footer", "body" <br/> Required
+         * @param {string} imageURL - Defines the sections's content <br/> Accepts : stringified image URLs, stringified text, stringified HTML markup <br/> Required
+         * @param {number} position - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional
+         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
+         * @param {number} imageWidth - Specify custom width for images <br/> Only works for type: "image" <br/> Optional
+         * @param {number} imageHeight - Specify custom height for images <br/> Only works for type: "image" <br/> Optional
+         * @memberof toDoc
+         */
+        doc.createImage = function(sectionType, imageURL, position, align, imageWidth, imageHeight) {
+
+            // Store section data and settings
+            var sectionObj = {
+                "sContentType": "",
+                "sContent": "",
+                "sPosition": 0,
+                "sAlign": "",
+                "sSize": "",
+                "sFont": "",
+                "iAlign": "",
+                "iWidth": "",
+                "iHeight": "",
+            };
+
+            var contentObj = {
+                "cContent": "",
+                "cPosition": 0,
+                "cType": "",
+                "cAlign": "",
+                "iAlign": "",
+                "iWidth": "",
+                "iHeight": "",
+            };
+
+            var imageObj = {};
+
+            // Create image for header/footer or body
+            if (sectionType.length > 0 && typeof(sectionType) == "string" && (sectionType === "header" || sectionType === "footer" || sectionType === "body")) {
+                if (sectionType === "header" || sectionType === "footer") {
+                    imageObj = sectionObj;
+                } else if (sectionType === "body") {
+                    imageObj = contentObj;
+                }
+            } else {
+                console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
+                return;
+            }
+
+            // Validate and set alignment
+            if (!align) {
+                imageObj.sAlign = "left";
+                imageObj.iAlign = "left";
+            } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
+                imageObj.sAlign = align;
+                imageObj.iAlign = align;
+            } else {
+                console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
+                return;
+            }
+
+            // Validate and set position
+            if (!position) {
+                imageObj.sPosition = 0;
+            } else if (position && Number.isInteger(position) && position > 0) {
+                imageObj.sPosition = position;
+            } else {
+                console.error(position + " is an invalid header position, expected number");
+                return;
+            }
+
+            // Validate and set image width
+            if (!imageWidth) {
+                imageObj.iWidth = "";
+            } else if (imageWidth && Number.isInteger(imageWidth) && imageWidth > 0) {
+                imageObj.iWidth = imageWidth;
+            } else {
+                console.error(imageWidth + " is an invalid header position, expected number");
+                return;
+            }
+
+            // Validate and set image height
+            if (!imageHeight) {
+                imageObj.iHeight = "";
+            } else if (imageHeight && Number.isInteger(imageHeight) && imageHeight > 0) {
+                imageObj.iHeight = imageHeight;
+            } else {
+                console.error(imageHeight + " is an invalid header position, expected number");
+                return;
+            }
+
+            // Validate URL and create image
+            var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+            // Check for valid URL
+            if (urlRegex.test(content)) {
+                var imgUrl = content,
+                    imgAlign = imageObj.iAlign,
+                    imgHeight = imageObj.iWidth,
+                    imgWidth = imageObj.iHeight;
+                // Get image as DATA URL
+                getImage(imgUrl, imgAlign, imgWidth, imgHeight, function(imgMarkup) {
+                    imageObj.sContent = imgMarkup;
+                    imageObj.sContentType = contentType;
+                });
+            } else {
+                console.error(content + "is not an valid value for the parameter 'content', expected image url/path");
+                return;
+            }
+
+            // Create section based on type - Header / Footer / Body and push to respestive array
+            if (sectionType === "header") {
+                oData.aHeader.push(imageObj);
+            } else if (sectionType === "footer") {
+                oData.aFooter.push(imageObj);
+            } else if (sectionType === "body") {
+                oData.aContent.push(imageObj);
+            }
+        };
+
+        /** 
          * Stitch sections during document generation
          * @private
          * @returns {string} Returns stringified markup of header and footer content
@@ -275,7 +418,7 @@
             var sectionString = "";
             // Sort by ascending position
             if (sections.length > 1) {
-                sections.sort(function(a,b){
+                sections.sort(function(a, b) {
                     var posA = a["cPosition"];
                     var posB = b["cPosition"];
                     return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
@@ -295,145 +438,6 @@
         };
 
         /** 
-         * Creates a Paragraph or Page in the document
-         * @public
-         * @param {string} type - Specify whether the content is a Paragraph, a Page or an Image <br/> Accepts : "paragraph", "image", "page" <br/> Required
-         * @param {string} content - Defines the document's content <br/> Accepts : stringified text, stringified HTML markup, stringified image URLs <br/> Required
-         * @param {number} position - Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for pagagraphs, pages and images <br/> Optional if passing a whole HTML document
-         * @param {string} align - Defines the content's alignemnt <br/> Accepts : "left", "right", "center", "justify", "top", "bottom", "middle" <br/> Only works for type: "paragraph" <br/> Optional 
-         * @param {number} imageWidth - Specify custom width for images <br/> Only works for type: "image" <br/> Optional
-         * @param {number} imageHeight - Specify custom height for images <br/> Only works for type: "image" <br/> Optional
-         * @memberof toDoc
-         */
-        doc.createContent = function(type, content, position, align, imageWidth, imageHeight) {
-            var cont = "", 
-                contentPosition = 0,
-                contentType = "";
-
-            var contentObj = {
-                "cContent": cont,
-                "cPosition": contentPosition,
-                "cType" : contentType,
-                "cAlign": "",
-                "iAlign": "",
-                "iWidth": "",
-                "iHeight": "",
-            };
-
-            switch (type) {
-                
-                // Create content with an Image
-                case "image":
-                    var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-                    // Check for valid URL
-                    if (urlRegex.test(content)) {
-                        var imgUrl = content;
-                        getImage(imgUrl, function(imgString){
-                            contentObj.cContent = imgString;
-                            contentObj.cType = type;
-                            // Check for custom alignment
-                            if (align && (align === "left" || align === "top" || align === "middle" || align === "left" || align === "right")) {
-                                contentObj.iAlign = align;
-                            } else {
-                                console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
-                                return;
-                            }
-
-                            // Check for custom width
-                            if (imageWidth && (Number.isInteger(imageWidth) && imageWidth > 0)) {
-                                contentObj.iWidth = imageWidth;
-                            } else {
-                                console.error(imageWidth + " is an invalid image width, expected type number");
-                                return;
-                            }
-
-                            // Check for custom height
-                            if (imageHeight && (Number.isInteger(imageHeight) && imageHeight > 0)) {
-                                contentObj.iHeight = imageHeight;
-                            } else {
-                                console.error(imageHeight + " is an invalid image height, expected type number");
-                                return;
-                            }
-
-                        });
-                    } else {
-                        console.error(content + " is not an valid value for the parameter 'content', expected image url/path");
-                        return;
-                    }
-                    break;
-                
-                // Create content with Text or HTML
-                case "paragraph":
-                    if (typeof(content) == "string" && content.length > 0) {
-                        contentObj.cContent = content;
-                        // Check if content is Text or HTML markup
-                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
-                        if (htmlRegex.test(content)) {
-                            contentObj.cType = "html";
-                        } else {
-                            contentObj.cType = type;
-                            // Check for custom alignment
-                            if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
-                                contentObj.cAlign = align;
-                            } else {
-                                console.error(align + " is an invalid alignment for image, expected 'left', 'center', 'right', or 'justify'");
-                                return;
-                            }
-                        }
-                    } else {
-                        console.error(content + " is not an valid value for the parameter 'content', expected string");
-                        return;
-                    }
-                    break;
-                
-                // Create page with Text ot HTML
-                case "page":
-                    if (typeof(content) == "string" && content.length > 0) {
-                        contentObj.cContent = content;
-                        // Check for HTML markup
-                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
-                        if (htmlRegex.test(content)) {
-                            contentObj.cType = "html_page";
-                        } else {
-                            contentObj.cType = type;
-                        }
-                    } else {
-                        console.error(content + "is not an valid value for the parameter 'content', expected string");
-                        return;
-                    }
-                    break;
-                
-                // Error
-                default:
-                    console.error(contentType + " is an invalid content type, expected 'image', 'string' or 'html'");
-                    return;
-            }
-
-            // Check for valid and duplicate content position
-            if (Number.isInteger(position) && position > 0) {
-                if (oData.aContent.length > 0) {
-                    oData.aContent.every(function(i){
-                        if (i.hasOwnProperty("cPosition")) {
-                            if (i.cPosition == position) {
-                                console.error("Content with position: " + i.cPosition + " has already been defined, enter new position for " + content);
-                                return false;
-                            } else {
-                                return true;
-                            }
-                        }
-                    });
-                }
-                contentObj.cPosition = position; // Check for relocaton
-            } else {
-                console.error(position + " is an invalid content position, expected type number");
-                return;
-            }
-
-            // Push to array with other contents
-            oData.aContent.push(contentObj);
-        };
-
-        /** 
          * Stitch Page during document generation
          * @private
          * @returns {string} Returns stringified markup of all pages
@@ -444,7 +448,7 @@
 
             // Sort by ascending position
             if (content.length > 1) {
-                content.sort(function(a,b){
+                content.sort(function(a, b) {
                     var posA = a["cPosition"];
                     var posB = b["cPosition"];
                     return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
@@ -459,18 +463,15 @@
                     // Stitch markup based on content type
                     if (i.cType === "paragraph") {
 
-                        contentString = contentString + oData.paraStart + i.cContent + oData.paraEnd;
-                        if (i.cNextLine) {
-
-                        }
-
+                        contentString = contentString + "<p align='" + i.cAlign + "'>" + "<font size='" + i.cSize + "' face ='" + i.cFont + "'>" + i.cContent + oData.fontEnd + oData.paraEnd;
+                    
                     } else if (i.cType === "page") {
 
                         contentString = oData.pageBreak + contentString + i.cContent;
 
                     } else if (i.cType === "image" || i.cType === "html") {
 
-                        contentString = contentString + oData.break + i.cContent + oData.break;
+                        contentString = contentString + oData.break+i.cContent + oData.break;
 
                     } else if (i.cType === "html_page") {
 
@@ -489,6 +490,7 @@
                 return "";
             }
         };
+
 
         /** 
          * Creates and stores an image as a local data URL from image's URL
@@ -700,7 +702,7 @@
             // Create download link element
             var downloadLink = document.createElement("a");
             document.body.appendChild(downloadLink);
-            
+
             // Check for IE 10/11
             if (navigator.msSaveOrOpenBlob) {
                 navigator.msSaveOrOpenBlob(blob, fileName);
@@ -726,4 +728,4 @@
         window.toDoc = toDoc();
     }
 
-}) (window);
+})(window);
