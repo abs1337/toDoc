@@ -55,20 +55,20 @@
         };
 
         /** 
-         * Creates a Header or Footer Section in the document
+         * Creates a Header or a Footer Section in the document
          * @public
-         * @param {string} sectionType - Defines whether the section is a header or footer <br/> Accepts : "header", "footer" <br/> Required
-         * @param {string} contentType - Defines whether the section text or stringified HTML markup <br/> Accepts : "text", "html" <br/> Required
-         * @param {string} content - Defines the sections's content <br/> Accepts : stringified text, stringified HTML markup <br/> Required
+         * @param {string} sectionType - Specifies whether the content is for the header or footer of the document <br/> Accepts : "header" &#124; "footer" <br/> Required
+         * @param {string} contentType - Defines whether the section's content is Text or stringified HTML markup <br/> Accepts : "text" &#124; "html" <br/> Required
+         * @param {string} content -  The content that will be created in section <br/> Accepts : stringified text &#124; stringified HTML markup <br/> Required
          * @param {number} position - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default position: 0 <br/> Optional
-         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
-         * @param {number} size - Specify <br/> Default size: "" <br/> Optional
-         * @param {string} font - Specify <br/> Default font: Times New Roman <br/> Optional
+         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment: left <br/> Optional
+         * @param {string} size - Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional
+         * @param {string} font - Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional
          * @memberof toDoc
          */
         doc.createSection = function(sectionType, contentType, content, position, align, size, font) {
 
-            // Store section data and settings
+            // Store section data and settings as an object
             var sectionObj = {
                 "sContentType": "",
                 "sContent": "",
@@ -101,17 +101,18 @@
                 return;
             }
 
-            // Validate text's font size
+            // Validate and set font size
+            var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                sectionObj.sSize = "";
-            } else if (size && Number.isInteger(size) && size > 0) {
+                sectionObj.sSize = "16px";
+            } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
                 sectionObj.iWidth = size;
             } else {
                 console.error(sSize + " is an invalid header position, expected number");
                 return;
             }
 
-            // Validate text's font face
+            // Validate and set font family
             if (!font) {
                 sectionObj.sFont = "";
             } else if (font && typeof(font) == "string") {
@@ -185,7 +186,7 @@
             if (sections.length > 0) {
                 sections.forEach(function(i) {
                     if (i.sContentType === "text") {
-                        sectionString = sectionString + "<p align='" + i.sAlign + "'>" + "<font size='" + i.sSize + "' face ='" + i.sFont + "'>" + i.sContent + oData.fontEnd + oData.paraEnd;
+                        sectionString = sectionString + "<p align='" + i.sAlign + "' style='font-size : '" + i.sSize + "; font-family : " + i.sFont + ", Times New Roman;'>" + i.sContent + oData.paraEnd;
                     } else if (i.sContentType === "image" || i.sContentType === "html") {
                         sectionString = sectionString + i.sContent;
                     }
@@ -197,12 +198,12 @@
         /** 
          * Creates a Paragraph or Page in the document
          * @public
-         * @param {string} type - Specify whether the content is a Paragraph or Page <br/> Accepts : "paragraph", "page" <br/> Required
-         * @param {string} content - Defines the document's content <br/> Accepts : stringified text, stringified HTML markup <br/> Required
+         * @param {string} type - Specify whether the content is a Paragraph or a new Page <br/> Accepts : "paragraph" &#124; "page" <br/> Required
+         * @param {string} content - The content that will be created as a Paragraph or Page <br/> Accepts : stringified text &#124; stringified HTML markup <br/> Required
          * @param {number} position - Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document
-         * @param {string} align - Defines the content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
-         * @param {number} size - Specify <br/> Default size: "" <br/> Optional
-         * @param {string} font - Specify <br/> Default font: Times New Roman <br/> Optional
+         * @param {string} align - Defines the content's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment: left <br/> Optional
+         * @param {string} string - Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional
+         * @param {string} font - Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional
          * @memberof toDoc
          */
         doc.createContent = function(type, content, position, align, size, font) {
@@ -252,17 +253,18 @@
                 return;
             }
 
-            // Validate text's font size
+            // Validate and set font size
+            var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                contentObj.sSize = "";
-            } else if (size && Number.isInteger(size) && size > 0) {
-                contentObj.iWidth = size;
+                sectionObj.sSize = "16px";
+            } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
+                sectionObj.iWidth = size;
             } else {
                 console.error(sSize + " is an invalid header position, expected number");
                 return;
             }
 
-            // Validate text's font face
+            // Validate and set font face
             if (!font) {
                 contentObj.sFont = "";
             } else if (font && typeof(font) == "string") {
@@ -344,7 +346,7 @@
                     // Stitch markup based on content type
                     if (i.cType === "paragraph") {
 
-                        contentString = contentString + "<p align='" + i.cAlign + "'>" + "<font size='" + i.cSize + "' face ='" + i.cFont + "'>" + i.cContent + oData.fontEnd + oData.paraEnd;
+                        sectionString = sectionString + "<p align='" + i.cAlign + "' style='font-size : '" + i.cSize + "; font-family : " + i.cFont + ", Times New Roman;'>" + i.cContent + oData.paraEnd;
 
                     } else if (i.cType === "page") {
 
@@ -375,12 +377,12 @@
         /** 
          * Creates an image in the Header, Footer or Body  of the document
          * @public
-         * @param {string} sectionType - Specifies where the image is inserted in the document <br/> Accepts : "header", "footer", "body" <br/> Required
-         * @param {string} imageURL - Defines the sections's content <br/> Accepts : stringified image URLs, stringified text, stringified HTML markup <br/> Required
-         * @param {number} position - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional
-         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right", "justify" <br/> Default alignment: left <br/> Optional
-         * @param {number} imageWidth - Specify custom width for images <br/> Only works for type: "image" <br/> Optional
-         * @param {number} imageHeight - Specify custom height for images <br/> Only works for type: "image" <br/> Optional
+         * @param {string} sectionType - Specifies where the image will be inserted in the document <br/> Accepts : "header" &#124; "footer" &#124; "body" <br/> Required
+         * @param {string} imageURL - Specifies the image's URL <br/> Accepts : stringified image URL <br/> Required
+         * @param {number} position - Specifies the image's position in the document <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional
+         * @param {string} align - Defines the image's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" <br/> Default alignment: left <br/> Optional
+         * @param {number} imageWidth - Specify a custom width for images <br/> Only works for type: "image" <br/> Optional
+         * @param {number} imageHeight - Specify a custom height for images <br/> Only works for type: "image" <br/> Optional
          * @memberof toDoc
          */
         doc.createImage = function(sectionType, imageURL, position, align, imageWidth, imageHeight) {
@@ -549,11 +551,11 @@
         /** 
          * Inserts page number in specified section of the document
          * @public
-         * @param {string} sectionType - Specifies where the image is inserted in the document <br/> Accepts : "header", "footer", "body" <br/> Required
-         * @param {number} format - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional
-         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left", "center", "right" <br/> Default alignment: left <br/> Optional
-         * @param {number} size - Specify <br/> Default size: "" <br/> Optional
-         * @param {string} font - Specify <br/> Default font: Times New Roman <br/> Optional
+         * @param {string} sectionType - Specifies where the page number is inserted in the document <br/> Accepts : "header" &#124; "footer" <br/> Required
+         * @param {number} format - Specifies the page number's format <br/> Accepts : 1 &#124; 2 <br/> Default value: 1 <br/> Optional
+         * @param {string} align - Defines the page number's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" <br/> Default alignment: left <br/> Optional
+         * @param {string} string - Specifies the page number's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional
+         * @param {string} font - Specifies the page number's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional
          * @memberof toDoc
          */
         doc.createPagenum = function(sectionType, format, align, size, font) {
@@ -582,12 +584,13 @@
             }
 
             // Validate text's font size
+            var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                sectionObj.sSize = "";
-            } else if (size && Number.isInteger(size) && size > 0) {
+                sectionObj.sSize = "16px";
+            } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
                 sectionObj.iWidth = size;
             } else {
-                console.error(sSize + " is an invalod font size, expected number");
+                console.error(sSize + " is an invalid header position, expected number");
                 return;
             }
 
@@ -603,9 +606,9 @@
 
             // Format page number
             if (!format || format === 1) {
-                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "'>" + "<font size='" + sectionObj.sSize + "' face ='" + sectionObj.sFont + "'>" + oData.pageNum_1 + oData.fontEnd + oData.paraEnd;
+                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "' style='font-size : '" + sectionObj.sSize + "; font-family : " + sectionObj.sFont + ", Times New Roman;'>" + oData.pageNum_1 + oData.paraEnd;
             } else if (format === 2) {
-                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "'>" + "<font size='" + sectionObj.sSize + "' face ='" + sectionObj.sFont + "'>" + oData.pageNum_2 + oData.fontEnd + oData.paraEnd;
+                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "' style='font-size : '" + sectionObj.sSize + "; font-family : " + sectionObj.sFont + ", Times New Roman;'>" + oData.pageNum_2 + oData.paraEnd;
             } else {
                 console.error(format + " is an invalid format for page numbers, expected number 1/2");
                 return; 
