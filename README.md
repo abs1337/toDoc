@@ -1,5 +1,5 @@
 ## toDoc.js 
-JS Library to create create a Word document with Text/HTML
+JS library to create create a Word document with Text/HTML
 
 Methods :
  * [toDoc.createSection(sectionType, contentType, content, position, align, size, font)](#toDoc.createSection)
