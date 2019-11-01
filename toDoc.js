@@ -19,15 +19,15 @@
          * @private
          * @memberof toDoc
          */
-        var oSettings = {
-            pageSizeX: "8.5in",
-            pageSizeY: "11in",
-            marginTop: "1in",
-            marginBottom: "1in",
-            marginLeft: "1in",
-            marginRight: "1in",
-            headerMargin: "0.5in",
-            footerMargin: "0.5in",
+        var oDocSettings = {
+            "pageSizeX": "8.5in",
+            "pageSizeY": "11in",
+            "marginTop": "1in",
+            "marginBottom": "1in",
+            "marginLeft": "1in",
+            "marginRight": "1in",
+            "headerMargin": "0.5in",
+            "footerMargin": "0.5in",
         };
 
         /** 
@@ -57,13 +57,13 @@
         /** 
          * Creates a Header or a Footer Section in the document
          * @public
-         * @param {string} sectionType - Specifies whether the content is for the header or footer of the document <br/> Accepts : "header" &#124; "footer" <br/> Required
-         * @param {string} contentType - Defines whether the section's content is Text or stringified HTML markup <br/> Accepts : "text" &#124; "html" <br/> Required
-         * @param {string} content -  The content that will be created in section <br/> Accepts : stringified text &#124; stringified HTML markup <br/> Required
-         * @param {number} position - Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default position: 0 <br/> Optional
-         * @param {string} align - Defines the section content's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment: left <br/> Optional
-         * @param {string} size - Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional
-         * @param {string} font - Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional
+         * @param {string} sectionType - Specifies whether to create content for the header or footer of the document <br/> Accepts - "header" &#124; "footer" <br/> Required
+         * @param {string} contentType - Defines whether the content is Text or stringified HTML markup <br/> Accepts - "text" &#124; "html" <br/> Required
+         * @param {string} content -  The content that will be inserted in the document <br/> Accepts - stringified text &#124; stringified HTML markup <br/> Required
+         * @param {number} position - Specifies the content's position in the section  <br/> Header/Footer content will be sorted by positon during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Optional
+         * @param {string} align - Specifies the content's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment - left <br/> Optional
+         * @param {string} size - Specifies the content's font size <br/> Accepts - CSS font-size <br/> Default size - 12pt/16px/1em  <br/> Optional
+         * @param {string} font - Specifies the content's font family <br/> Accepts - CSS font-family <br/> Default font - Times New Roman <br/> Optional
          * @memberof toDoc
          */
         doc.createSection = function(sectionType, contentType, content, position, align, size, font) {
@@ -166,9 +166,9 @@
         };
 
         /** 
-         * Stitch sections during document generation
+         * Stitch sections together during document generation
          * @private
-         * @returns {string} Returns stringified markup of header and footer content
+         * @returns {string} Returns a stringified markup of header and footer content
          * @memberof toDoc
          */
         var getSection = function(sectionArray) {
@@ -198,12 +198,13 @@
         /** 
          * Creates a Paragraph or Page in the document
          * @public
-         * @param {string} type - Specify whether the content is a Paragraph or a new Page <br/> Accepts : "paragraph" &#124; "page" <br/> Required
-         * @param {string} content - The content that will be created as a Paragraph or Page <br/> Accepts : stringified text &#124; stringified HTML markup <br/> Required
-         * @param {number} position - Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document
-         * @param {string} align - Defines the content's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment: left <br/> Optional
-         * @param {string} string - Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional
-         * @param {string} font - Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional
+         * @param {string} type - Defines whether the content is a Paragraph or a Page <br/> Accepts - "paragraph" - Inserts a paragraph in the next line &#124; "page" - Inserts a paragraph in the next page <br/> <br/> Required
+         * @param {string} content - The content that will be created in the document <br/> Accepts - Text &#124; Stringified HTML <br/> Required
+         * @param {number} position - Specifies the content's position in the document <br/> Paragraphs and pages will be sorted by positon during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document
+         * @param {string} align - Specifies the content's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment - left <br/> Optional
+         * @param {string} size - Specifies the content's font size <br/> Accepts - CSS font-size <br/> Default size - 12pt/16px/1em  <br/> Optional
+         * @param {string} font - Specifies the content's font family <br/> Accepts - CSS font-family <br/> Default font - Times New Roman <br/> Optional   
+
          * @memberof toDoc
          */
         doc.createContent = function(type, content, position, align, size, font) {
@@ -323,7 +324,7 @@
         /** 
          * Stitch Page during document generation
          * @private
-         * @returns {string} Returns stringified markup of all pages
+         * @returns {string} Returns a stringified markup of all pages
          * @memberof toDoc
          */
         var getContents = function() {
@@ -377,12 +378,12 @@
         /** 
          * Creates an image in the Header, Footer or Body  of the document
          * @public
-         * @param {string} sectionType - Specifies where the image will be inserted in the document <br/> Accepts : "header" &#124; "footer" &#124; "body" <br/> Required
-         * @param {string} imageURL - Specifies the image's URL <br/> Accepts : stringified image URL <br/> Required
-         * @param {number} position - Specifies the image's position in the document <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional
-         * @param {string} align - Defines the image's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" <br/> Default alignment: left <br/> Optional
-         * @param {number} imageWidth - Specify a custom width for images <br/> Only works for type: "image" <br/> Optional
-         * @param {number} imageHeight - Specify a custom height for images <br/> Only works for type: "image" <br/> Optional
+         * @param {string} sectionType - Defines the section where the image will be created <br/> Accepts - "header" &#124; "footer" &#124; "body" <br/> Required
+         * @param {string} imageURL - Specifies the image's URL <br/> Accepts - stringified image URL &#124; stringified data URL <br/> Required
+         * @param {number} position - Specifies the image's position in the document <br/> Images will be sorted by position along with Header/Footer/Paragraphs/Pages during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Optional
+         * @param {string} align - Defines the image's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" <br/> Default alignment - left <br/> Optional
+         * @param {number} imageWidth - Specify a custom width for images <br/> Use only for resizing images <br/> Accepts - Numbers > 0 <br/> Optional
+         * @param {number} imageHeight - Specify a custom height for images <br/> Use only for resizing images <br/> Accepts - Numbers > 0 <br/> Optional
          * @memberof toDoc
          */
         doc.createImage = function(sectionType, imageURL, position, align, imageWidth, imageHeight) {
@@ -470,8 +471,13 @@
 
             // Validate URL and create image
             var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-            // Check for valid URL
-            if (urlRegex.test(imageURL)) {
+            // Check for Data URL
+            if (imageURL.indexOf("data") == 0) {
+                var imgHTML = "<div align='" + imageObj.imgAlign + "'><img width='" + imageObj.imgWidth + "' height='" + imageObj.imgHeight + "' src='" + imageURL + "' crossOrigin='anonymous'></img>"
+                imageObj.sContent = imgHTML;
+                imageObj.cType = "image";
+                imageObj.sContentType = "image";
+            } else if (urlRegex.test(imageURL)) { // Check for URL
                 var imgUrl = imageURL,
                     imgAlign = imageObj.iAlign,
                     imgWidth = imageObj.iHeight,
@@ -574,16 +580,16 @@
         };
 
         /** 
-         * Inserts page number in specified section of the document
+         * Inserts a page number in specified section of the document
          * @public
-         * @param {string} sectionType - Specifies where the page number is inserted in the document <br/> Accepts : "header" &#124; "footer" <br/> Required
-         * @param {number} format - Specifies the page number's format <br/> Accepts : 1 &#124; 2 <br/> Default value: 1 <br/> Optional
-         * @param {string} align - Defines the page number's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" <br/> Default alignment: left <br/> Optional
-         * @param {string} string - Specifies the page number's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional
-         * @param {string} font - Specifies the page number's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional
+         * @param {string} sectionType - Defines the section where the page number is inserted in the document <br/> Accepts - "header" &#124; "footer" <br/> Required
+         * @param {number} format - Specifies the page number's format <br/> Accepts - 1 - Only page number &#124; 2 - Page X of Y <br/> Default value - 1 <br/> Optional
+         * @param {string} align - Specifies the page number's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" <br/> Default alignment - left <br/> Optional
+         * @param {string} size - Specifies the page number's font size <br/> Accepts - CSS font-size <br/> Default size - 12pt/16px/1em  <br/> Optional
+         * @param {string} font - Specifies the page number's font family <br/> Accepts - CSS font-family <br/> Default font - Times New Roman <br/> Optional            
          * @memberof toDoc
          */
-        doc.createPagenum = function(sectionType, format, align, size, font) {
+        doc.createPagenumber = function(sectionType, format, align, size, font) {
 
             // Store section data and settings
             var sectionObj = {
@@ -653,28 +659,24 @@
 
         };
 
-
         /** 
-         * Clears all section and content data
+         * Generates and saves a Word document
+         * Use this object to pass custom parameters
+         * ```javascript
+         * {
+         *     "pageSizeX": "8.5in",
+         *     "pageSizeY": "11in",
+         *     "marginTop": "1in",
+         *     "marginBottom": "1in",
+         *     "marginLeft": "1in",
+         *     "marginRight": "1in",
+         *     "headerMargin": "0.5in",
+         *     "footerMargin": "0.5in",
+         * };
+         * ```
          * @public
          * @param {string} fileName - Specifies the name of the document <br/> Required
-         * @param {object} params - Define custom parameters for the document's layout <br/> Optional
-         * @memberof toDoc
-         */
-        doc.clearDocument = function() {
-            // Header
-            oData.aHeader = [];
-            // Footer
-            oData.aFooter = [];
-            // Page / Paragraph
-            oData.aContent = [];
-        };
-
-        /** 
-         * Generates and saves a Word document.
-         * @public
-         * @param {string} fileName - Specifies the name of the document <br/> Required
-         * @param {object} params - Define custom parameters for the document's layout <br/> Optional
+         * @param {object} params - Define custom parameters for the document's layout <br/> Accepts - JSON Object <br/> Optional
          * @memberof toDoc
          */
         doc.createDocument = function(fileName, params) {
@@ -693,7 +695,7 @@
                 });
                 docParams = params;
             } else {
-                docParams = oSettings;
+                docParams = oDocSettings;
             }
 
             // HTML markup for Word Document
@@ -828,8 +830,22 @@
             doc.clearDocument();
         };
 
+        /** 
+         * Clears all created document data
+         * @public
+         * @memberof toDoc
+         */
+        doc.clearDocument = function() {
+            // Header
+            oData.aHeader = [];
+            // Footer
+            oData.aFooter = [];
+            // Page / Paragraph
+            oData.aContent = [];
+        };
+        
         return doc;
-    }
+    };
 
     // Set Lib globally and save to window
     if (typeof(window.toDoc) === 'undefined') {
