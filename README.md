@@ -1,22 +1,20 @@
 ## toDoc : <code>object</code>
-Convert HTML/Text to a Word Documnet
+JS Library to create create a Word document with Text/HTML
 
 **Kind**: global namespace
 
 * [toDoc](#toDoc) : <code>object</code>
     * [.toDoc()](#toDoc.toDoc) ⇒ <code>object</code>
     * [.doc.createSection(sectionType, contentType, content, position, align, size, font)](#toDoc.doc.createSection)
-    * [.doc.createContent(type, content, position, align, string, font)](#toDoc.doc.createContent)
+    * [.doc.createContent(type, content, position, align, size, font)](#toDoc.doc.createContent)
     * [.doc.createImage(sectionType, imageURL, position, align, imageWidth, imageHeight)](#toDoc.doc.createImage)
-    * [.doc.createPagenum(sectionType, format, align, string, font)](#toDoc.doc.createPagenum)
-    * [.doc.clearDocument(fileName, params)](#toDoc.doc.clearDocument)
+    * [.doc.createPagenumber(sectionType, format, align, size, font)](#toDoc.doc.createPagenumber)
     * [.doc.createDocument(fileName, params)](#toDoc.doc.createDocument)
+    * [.doc.clearDocument()](#toDoc.doc.clearDocument)
 
 <a name="toDoc.toDoc"></a>
 
 ### toDoc.toDoc() ⇒ <code>object</code>
-Master function
-
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
 **Returns**: <code>object</code> - Library object with global functions
 **Access**: public
@@ -30,17 +28,17 @@ Creates a Header or a Footer Section in the document
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sectionType | <code>string</code> | Specifies whether the content is for the header or footer of the document <br/> Accepts : "header" &#124; "footer" <br/> Required |
-| contentType | <code>string</code> | Defines whether the section's content is Text or stringified HTML markup <br/> Accepts : "text" &#124; "html" <br/> Required |
-| content | <code>string</code> | The content that will be created in section <br/> Accepts : stringified text &#124; stringified HTML markup <br/> Required |
-| position | <code>number</code> | Specifies the content's position in the section <br/> Accepts : 1++ <br/> Default position: 0 <br/> Optional |
-| align | <code>string</code> | Defines the section content's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment: left <br/> Optional |
-| size | <code>string</code> | Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional |
-| font | <code>string</code> | Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional |
+| sectionType | <code>string</code> | Specifies whether to create content for the header or footer of the document <br/> Accepts - "header" &#124; "footer" <br/> Required |
+| contentType | <code>string</code> | Defines whether the content is Text or stringified HTML markup <br/> Accepts - "text" &#124; "html" <br/> Required |
+| content | <code>string</code> | The content that will be inserted in the document <br/> Accepts - stringified text &#124; stringified HTML markup <br/> Required |
+| position | <code>number</code> | Specifies the content's position in the section  <br/> Header/Footer content will be sorted by positon during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Optional |
+| align | <code>string</code> | Specifies the content's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment - left <br/> Optional |
+| size | <code>string</code> | Specifies the content's font size <br/> Accepts - CSS font-size <br/> Default size - 12pt/16px/1em  <br/> Optional |
+| font | <code>string</code> | Specifies the content's font family <br/> Accepts - CSS font-family <br/> Default font - Times New Roman <br/> Optional |
 
 <a name="toDoc.doc.createContent"></a>
 
-### toDoc.doc.createContent(type, content, position, align, string, font)
+### toDoc.doc.createContent(type, content, position, align, size, font)
 Creates a Paragraph or Page in the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -48,12 +46,12 @@ Creates a Paragraph or Page in the document
 
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>string</code> | Specify whether the content is a Paragraph or a new Page <br/> Accepts : "paragraph" &#124; "page" <br/> Required |
-| content | <code>string</code> | The content that will be created as a Paragraph or Page <br/> Accepts : stringified text &#124; stringified HTML markup <br/> Required |
-| position | <code>number</code> | Defines the content's position in the document <br/> Accepts : 1++ <br/> Default value : 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document |
-| align | <code>string</code> | Defines the content's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment: left <br/> Optional |
-| string | <code>string</code> | Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional |
-| font | <code>string</code> | Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional |
+| type | <code>string</code> | Defines whether the content is a Paragraph or a Page <br/> Accepts - "paragraph" : Inserts a paragraph in the next line </br>&emsp;&emsp;&emsp;&emsp;&nbsp; "page" : Inserts a paragraph in the next page <br/> <br/> Required |
+| content | <code>string</code> | The content that will be created in the document <br/> Accepts - Text &#124; Stringified HTML <br/> Required |
+| position | <code>number</code> | Specifies the content's position in the document <br/> Paragraphs and pages will be sorted by positon during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document |
+| align | <code>string</code> | Specifies the content's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment - left <br/> Optional |
+| size | <code>string</code> | Specifies the content's font size <br/> Accepts - CSS font-size <br/> Default size - 12pt/16px/1em  <br/> Optional |
+| font | <code>string</code> | Specifies the content's font family <br/> Accepts - CSS font-family <br/> Default font - Times New Roman <br/> Optional |
 
 <a name="toDoc.doc.createImage"></a>
 
@@ -65,46 +63,33 @@ Creates an image in the Header, Footer or Body  of the document
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sectionType | <code>string</code> | Specifies where the image will be inserted in the document <br/> Accepts : "header" &#124; "footer" &#124; "body" <br/> Required |
-| imageURL | <code>string</code> | Specifies the image's URL <br/> Accepts : stringified image URL <br/> Required |
-| position | <code>number</code> | Specifies the image's position in the document <br/> Accepts : 1++ <br/> Default value: 0 <br/> Optional |
-| align | <code>string</code> | Defines the image's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" <br/> Default alignment: left <br/> Optional |
-| imageWidth | <code>number</code> | Specify a custom width for images <br/> Only works for type: "image" <br/> Optional |
-| imageHeight | <code>number</code> | Specify a custom height for images <br/> Only works for type: "image" <br/> Optional |
+| sectionType | <code>string</code> | Defines the section where the image will be created <br/> Accepts - "header" &#124; "footer" &#124; "body" <br/> Required |
+| imageURL | <code>string</code> | Specifies the image's URL <br/> Accepts - image URL &#124; base64 data URL <br/> Required |
+| position | <code>number</code> | Specifies the image's position in the document <br/> Images will be sorted by position along with Header/Footer/Paragraphs/Pages during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Optional |
+| align | <code>string</code> | Defines the image's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" <br/> Default alignment - left <br/> Optional |
+| imageWidth | <code>number</code> | Specify a custom width for images <br/> Use only for resizing images <br/> Accepts - Numbers > 0 <br/> Optional |
+| imageHeight | <code>number</code> | Specify a custom height for images <br/> Use only for resizing images <br/> Accepts - Numbers > 0 <br/> Optional |
 
-<a name="toDoc.doc.createPagenum"></a>
+<a name="toDoc.doc.createPagenumber"></a>
 
-### toDoc.doc.createPagenum(sectionType, format, align, string, font)
-Inserts page number in specified section of the document
-
-**Kind**: static method of [<code>toDoc</code>](#toDoc)
-**Access**: public
-
-| Param | Type | Description |
-| --- | --- | --- |
-| sectionType | <code>string</code> | Specifies where the page number is inserted in the document <br/> Accepts : "header" &#124; "footer" <br/> Required |
-| format | <code>number</code> | Specifies the page number's format <br/> Accepts : 1 &#124; 2 <br/> Default value: 1 <br/> Optional |
-| align | <code>string</code> | Defines the page number's alignemnt <br/> Accepts : "left" &#124; "center" &#124; "right" <br/> Default alignment: left <br/> Optional |
-| string | <code>string</code> | Specifies the page number's font size <br/> Accepts : CSS font-size <br/> Default size: 12pt/16px/1em  <br/> Optional |
-| font | <code>string</code> | Specifies the page number's font family <br/> Accepts : CSS font-family <br/> Default font: Times New Roman <br/> Optional |
-
-<a name="toDoc.doc.clearDocument"></a>
-
-### toDoc.doc.clearDocument(fileName, params)
-Clears all section and content data
+### toDoc.doc.createPagenumber(sectionType, format, align, size, font)
+Inserts a page number in specified section of the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
 **Access**: public
 
 | Param | Type | Description |
 | --- | --- | --- |
-| fileName | <code>string</code> | Specifies the name of the document <br/> Required |
-| params | <code>object</code> | Define custom parameters for the document's layout <br/> Optional |
+| sectionType | <code>string</code> | Defines the section where the page number is inserted in the document <br/> Accepts - "header" &#124; "footer" <br/> Required |
+| format | <code>number</code> | Specifies the page number's format <br/> Accepts - 1 : Only page number </br>&emsp;&emsp;&emsp;&emsp;&nbsp; 2 : Page X of Y <br/> Default value - 1 <br/> Optional |
+| align | <code>string</code> | Specifies the page number's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" <br/> Default alignment - left <br/> Optional |
+| size | <code>string</code> | Specifies the page number's font size <br/> Accepts - CSS font-size <br/> Default size - 12pt/16px/1em  <br/> Optional |
+| font | <code>string</code> | Specifies the page number's font family <br/> Accepts - CSS font-family <br/> Default font - Times New Roman <br/> Optional |
 
 <a name="toDoc.doc.createDocument"></a>
 
 ### toDoc.doc.createDocument(fileName, params)
-Generates and saves a Word document.
+``` "footerMargin": "0.5in",om parameters
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
 **Access**: public
@@ -112,4 +97,12 @@ Generates and saves a Word document.
 | Param | Type | Description |
 | --- | --- | --- |
 | fileName | <code>string</code> | Specifies the name of the document <br/> Required |
-| params | <code>object</code> | Define custom parameters for the document's layout <br/> Optional |
+| params | <code>object</code> | Define custom parameters for the document's layout <br/> Accepts - JSON Object <br/> Optional |
+
+<a name="toDoc.doc.clearDocument"></a>
+
+### toDoc.doc.clearDocument()
+Clears all created document data
+
+**Kind**: static method of [<code>toDoc</code>](#toDoc)
+**Access**: public
