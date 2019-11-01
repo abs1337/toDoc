@@ -95,7 +95,7 @@ Use this object to pass custom parameters
    "marginRight": "1in",
    "headerMargin": "0.5in",
    "footerMargin": "0.5in",
-};
+}
 ```
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
 **Access**: public
