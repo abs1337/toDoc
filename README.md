@@ -84,6 +84,7 @@ Inserts a page number in specified section of the document
 
 ### toDoc.createDocument(fileName, params)
 Generates and saves a Word document
+
 Use this object to pass custom parameters
 ```javascript
 {
