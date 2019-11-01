@@ -1,26 +1,20 @@
-## toDoc : <code>object</code>
+## toDoc 
 JS Library to create create a Word document with Text/HTML
 
-**Kind**: global namespace
-
-* [toDoc](#toDoc) : <code>object</code>
-    * [.toDoc()](#toDoc.toDoc) ⇒ <code>object</code>
-    * [.doc.createSection(sectionType, contentType, content, position, align, size, font)](#toDoc.doc.createSection)
-    * [.doc.createContent(type, content, position, align, size, font)](#toDoc.doc.createContent)
-    * [.doc.createImage(sectionType, imageURL, position, align, imageWidth, imageHeight)](#toDoc.doc.createImage)
-    * [.doc.createPagenumber(sectionType, format, align, size, font)](#toDoc.doc.createPagenumber)
-    * [.doc.createDocument(fileName, params)](#toDoc.doc.createDocument)
-    * [.doc.clearDocument()](#toDoc.doc.clearDocument)
+[Methods](#Methods) :
+ * [toDoc.createSection(sectionType, contentType, content, position, align, size, font)](#toDoc.createSection)
+ * [toDoc.createContent(type, content, position, align, size, font)](#toDoc.createContent)
+ * [toDoc.createImage(sectionType, imageURL, position, align, imageWidth, imageHeight)](#toDoc.createImage)
+ * [toDoc.createPagenumber(sectionType, format, align, size, font)](#toDoc.createPagenumber)
+ * [toDoc.createDocument(fileName, params)](#toDoc.createDocument)
+ * [toDoc.clearDocument()](#toDoc.clearDocument)
 
 <a name="toDoc.toDoc"></a>
 
-### toDoc.toDoc() ⇒ <code>object</code>
-**Kind**: static method of [<code>toDoc</code>](#toDoc)
-**Returns**: <code>object</code> - Library object with global functions
-**Access**: public
-<a name="toDoc.doc.createSection"></a>
 
-### toDoc.doc.createSection(sectionType, contentType, content, position, align, size, font)
+<a name="toDoc.createSection"></a>
+
+### toDoc.createSection(sectionType, contentType, content, position, align, size, font)
 Creates a Header or a Footer Section in the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -36,9 +30,9 @@ Creates a Header or a Footer Section in the document
 | size | <code>string</code> | Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size : 12pt/16px/1em  <br/> Optional |
 | font | <code>string</code> | Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font : Times New Roman <br/> Optional |
 
-<a name="toDoc.doc.createContent"></a>
+<a name="toDoc.createContent"></a>
 
-### toDoc.doc.createContent(type, content, position, align, size, font)
+### toDoc.createContent(type, content, position, align, size, font)
 Creates a Paragraph or Page in the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -53,9 +47,9 @@ Creates a Paragraph or Page in the document
 | size | <code>string</code> | Specifies the content's font size <br/> Accepts : CSS font-size <br/> Default size : 12pt/16px/1em  <br/> Optional |
 | font | <code>string</code> | Specifies the content's font family <br/> Accepts : CSS font-family <br/> Default font : Times New Roman <br/> Optional |
 
-<a name="toDoc.doc.createImage"></a>
+<a name="toDoc.createImage"></a>
 
-### toDoc.doc.createImage(sectionType, imageURL, position, align, imageWidth, imageHeight)
+### toDoc.createImage(sectionType, imageURL, position, align, imageWidth, imageHeight)
 Creates an image in the Header, Footer or Body  of the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -70,9 +64,9 @@ Creates an image in the Header, Footer or Body  of the document
 | imageWidth | <code>number</code> | Specify a custom width for images <br/> Use only for resizing images <br/> Accepts : Numbers > 0 <br/> Optional |
 | imageHeight | <code>number</code> | Specify a custom height for images <br/> Use only for resizing images <br/> Accepts : Numbers > 0 <br/> Optional |
 
-<a name="toDoc.doc.createPagenumber"></a>
+<a name="toDoc.createPagenumber"></a>
 
-### toDoc.doc.createPagenumber(sectionType, format, align, size, font)
+### toDoc.createPagenumber(sectionType, format, align, size, font)
 Inserts a page number in specified section of the document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -86,9 +80,9 @@ Inserts a page number in specified section of the document
 | size | <code>string</code> | Specifies the page number's font size <br/> Accepts : CSS font-size <br/> Default size : 12pt/16px/1em  <br/> Optional |
 | font | <code>string</code> | Specifies the page number's font family <br/> Accepts : CSS font-family <br/> Default font : Times New Roman <br/> Optional |
 
-<a name="toDoc.doc.createDocument"></a>
+<a name="toDoc.createDocument"></a>
 
-### toDoc.doc.createDocument(fileName, params)
+### toDoc.createDocument(fileName, params)
 Generates and saves a Word document
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
@@ -99,9 +93,9 @@ Generates and saves a Word document
 | fileName | <code>string</code> | Specifies the name of the document <br/> Required |
 | params | <code>object</code> | Define custom parameters for the document's layout <br/> Accepts : JSON Object <br/> Optional |
 
-<a name="toDoc.doc.clearDocument"></a>
+<a name="toDoc.clearDocument"></a>
 
-### toDoc.doc.clearDocument()
+### toDoc.clearDocument()
 Clears all created document data
 
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
