@@ -198,7 +198,7 @@
         /** 
          * Creates a Paragraph or Page in the document
          * @public
-         * @param {string} type - Defines whether the content is a Paragraph or a Page <br/> Accepts - "paragraph" - Inserts a paragraph in the next line &#124; "page" - Inserts a paragraph in the next page <br/> <br/> Required
+         * @param {string} type - Defines whether the content is a Paragraph or a Page <br/> Accepts - "paragraph" - Inserts a paragraph in the next line </br>&emsp;&emsp;&emsp;&emsp;&nbsp; "page" - Inserts a paragraph in the next page <br/> <br/> Required
          * @param {string} content - The content that will be created in the document <br/> Accepts - Text &#124; Stringified HTML <br/> Required
          * @param {number} position - Specifies the content's position in the document <br/> Paragraphs and pages will be sorted by positon during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document
          * @param {string} align - Specifies the content's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment - left <br/> Optional
@@ -379,7 +379,7 @@
          * Creates an image in the Header, Footer or Body  of the document
          * @public
          * @param {string} sectionType - Defines the section where the image will be created <br/> Accepts - "header" &#124; "footer" &#124; "body" <br/> Required
-         * @param {string} imageURL - Specifies the image's URL <br/> Accepts - stringified image URL &#124; stringified data URL <br/> Required
+         * @param {string} imageURL - Specifies the image's URL <br/> Accepts - image URL &#124; base64 data URL <br/> Required
          * @param {number} position - Specifies the image's position in the document <br/> Images will be sorted by position along with Header/Footer/Paragraphs/Pages during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Optional
          * @param {string} align - Defines the image's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" <br/> Default alignment - left <br/> Optional
          * @param {number} imageWidth - Specify a custom width for images <br/> Use only for resizing images <br/> Accepts - Numbers > 0 <br/> Optional
@@ -504,7 +504,7 @@
         };
 
         /** 
-         * Creates and stores an image as a local data URL from image's URL
+         * Creates and stores an image as a base64 data URL from image's URL
          * @private
          * @param {string} url - URL or path of the image
          * @param {string} imgAlign - Specifies the image's alignment
@@ -843,7 +843,7 @@
             // Page / Paragraph
             oData.aContent = [];
         };
-        
+
         return doc;
     };
 
