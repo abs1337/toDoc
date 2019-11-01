@@ -1,7 +1,6 @@
-## toDoc : <code>object</code>
+## toDoc 
 JS Library to create create a Word document with Text/HTML
 
-**Kind**: global namespace
 
 * [toDoc](#toDoc) : <code>object</code>
     * [.toDoc()](#toDoc.toDoc) ⇒ <code>object</code>
