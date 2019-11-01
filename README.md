@@ -87,14 +87,14 @@ Generates and saves a Word document
 Use this object to pass custom parameters
 ```javascript
 {
-  "pageSizeX": "8.5in",
-  "pageSizeY": "11in",
-  "marginTop": "1in",
-  "marginBottom": "1in",
- "marginLeft": "1in",
-  "marginRight": "1in",
-  "headerMargin": "0.5in",
-  "footerMargin": "0.5in",
+   "pageSizeX": "8.5in",
+   "pageSizeY": "11in",
+   "marginTop": "1in",
+   "marginBottom": "1in",
+   "marginLeft": "1in",
+   "marginRight": "1in",
+   "headerMargin": "0.5in",
+   "footerMargin": "0.5in",
 };
 ```
 **Kind**: static method of [<code>toDoc</code>](#toDoc)
