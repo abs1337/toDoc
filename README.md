@@ -1,4 +1,4 @@
-## toDoc 
+## toDoc.js 
 JS Library to create create a Word document with Text/HTML
 
 Methods :
