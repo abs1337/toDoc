@@ -474,12 +474,13 @@
             if (urlRegex.test(imageURL)) {
                 var imgUrl = imageURL,
                     imgAlign = imageObj.iAlign,
-                    imgHeight = imageObj.iWidth,
-                    imgWidth = imageObj.iHeight;
+                    imgWidth = imageObj.iHeight,
+                    imgHeight = imageObj.iWidth;
                 // Get image as DATA URL
                 getImage(imgUrl, imgAlign, imgWidth, imgHeight, function(imgMarkup) {
                     imageObj.sContent = imgMarkup;
                     imageObj.cType = "image";
+                    imageObj.sContentType = "image";
                 });
             } else {
                 console.error(imageURL + "is not an valid value for the parameter 'imageURL', expected image url/path");
@@ -546,19 +547,15 @@
                     return "";
                 }
             }
-
             
-            // set image source
-
-            //image.src = url;
-
-
+            // Load image
+            image.src = url;
 
             // Try Handling CORS error.
-            var request = new XMLHttpRequest();
+            /*var request = new XMLHttpRequest();
             request.open("GET", url);
             request.onload = request.onerror = function() {
-                for (var responseText = x.responseText, responseTextLen = responseText.length, binary = "", i = 0; i < responseTextLen; ++i) {
+                for (var responseText = request.responseText, responseTextLen = responseText.length, binary = "", i = 0; i < responseTextLen; ++i) {
                   binary += String.fromCharCode(responseText.charCodeAt(i) & 255)
                 }
                 var src = 'data:image/jpeg;base64,'+ window.btoa(binary);
@@ -572,10 +569,8 @@
                     return imgHTML;
                 }
             };
-
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-            request.send("");
+            request.send("");*/
         };
 
         /** 
