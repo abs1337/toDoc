@@ -1,7 +1,7 @@
 ## toDoc 
 JS Library to create create a Word document with Text/HTML
 
-[Methods](#Methods) :
+[Methods] :
  * [toDoc.createSection(sectionType, contentType, content, position, align, size, font)](#toDoc.createSection)
  * [toDoc.createContent(type, content, position, align, size, font)](#toDoc.createContent)
  * [toDoc.createImage(sectionType, imageURL, position, align, imageWidth, imageHeight)](#toDoc.createImage)
