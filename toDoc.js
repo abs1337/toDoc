@@ -1,12 +1,11 @@
 /**
- * Convert HTML/Text to a Word Documnet
+ * JS Library to create create a Word document with Text/HTML
  * @namespace toDoc
  */
 (function(window) {
     // "use strict";
 
     /** 
-     * Master function
      * @public
      * @returns {object} Library object with global functions
      * @memberof toDoc
@@ -198,7 +197,7 @@
         /** 
          * Creates a Paragraph or Page in the document
          * @public
-         * @param {string} type - Defines whether the content is a Paragraph or a Page <br/> Accepts - "paragraph" - Inserts a paragraph in the next line </br>&emsp;&emsp;&emsp;&emsp;&nbsp; "page" - Inserts a paragraph in the next page <br/> <br/> Required
+         * @param {string} type - Defines whether the content is a Paragraph or a Page <br/> Accepts - "paragraph" : Inserts a paragraph in the next line </br>&emsp;&emsp;&emsp;&emsp;&nbsp; "page" : Inserts a paragraph in the next page <br/> <br/> Required
          * @param {string} content - The content that will be created in the document <br/> Accepts - Text &#124; Stringified HTML <br/> Required
          * @param {number} position - Specifies the content's position in the document <br/> Paragraphs and pages will be sorted by positon during document generation <br/> Accepts - Numbers > 0 <br/> Default position - 0 <br/> Required for pagagraphs and pages <br/> Optional if passing a whole HTML document
          * @param {string} align - Specifies the content's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" &#124; "justify" <br/> Default alignment - left <br/> Optional
@@ -583,7 +582,7 @@
          * Inserts a page number in specified section of the document
          * @public
          * @param {string} sectionType - Defines the section where the page number is inserted in the document <br/> Accepts - "header" &#124; "footer" <br/> Required
-         * @param {number} format - Specifies the page number's format <br/> Accepts - 1 - Only page number &#124; 2 - Page X of Y <br/> Default value - 1 <br/> Optional
+         * @param {number} format - Specifies the page number's format <br/> Accepts - 1 : Only page number </br>&emsp;&emsp;&emsp;&emsp;&nbsp; 2 : Page X of Y <br/> Default value - 1 <br/> Optional
          * @param {string} align - Specifies the page number's alignemnt <br/> Accepts - "left" &#124; "center" &#124; "right" <br/> Default alignment - left <br/> Optional
          * @param {string} size - Specifies the page number's font size <br/> Accepts - CSS font-size <br/> Default size - 12pt/16px/1em  <br/> Optional
          * @param {string} font - Specifies the page number's font family <br/> Accepts - CSS font-family <br/> Default font - Times New Roman <br/> Optional            
