@@ -85,7 +85,7 @@ Inserts a page number in specified section of the document
 ### toDoc.createDocument(fileName, params)
 Generates and saves a Word document
 
-Use this object to pass custom parameters
+Default document layout, use this as template for custom parameters:
 ```javascript
 {
    "pageSizeX": "8.5in",
