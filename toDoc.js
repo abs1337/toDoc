@@ -1,5 +1,8 @@
 /**
- * JS Library to create create a Word document with Text/HTML
+ * Title : toDoc.Js - JavaScript Library to create create a Word document with Text/HTML
+ * @author Abs1337
+ * @version 2.1, 11/4/2019
+ * @licence : MIT
  * @namespace toDoc
  */
 (function(window) {
