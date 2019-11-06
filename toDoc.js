@@ -225,21 +225,20 @@
 
             // Validate and set position
             if (!position) {
-                contentObj.sPosition = 0;
+                contentObj.cPosition = 0;
             } else if (position && Number.isInteger(position) && position > 0) {
                 // Check for duplicate content position
                 if (oData.aContent.length > 0) {
-                    oData.aContent.every(function(i) {
-                        if (i.hasOwnProperty("cPosition")) {
-                            if (i.cPosition == position) {
-                                console.error("Content with position: " + i.cPosition + " has already been defined, enter new position for " + content);
-                                return false;
-                            } else {
-                                contentObj.sPosition = position;
-                                return true;
-                            }
+                	for(var i = 0; i < oData.aContent.length; i++) {
+                		if (oData.aContent[i].cPosition == position) {
+                            console.error("Content with position: " + position + " has already been defined, enter new position for " + content);
+                            return;
+                        } else {
+                            contentObj.cPosition = position;
                         }
-                    });
+                	}
+                } else {
+                	contentObj.cPosition = position;
                 }
             } else {
                 console.error(position + " is an invalid header position, expected number");
