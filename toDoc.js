@@ -138,9 +138,10 @@
                     break;
                     // Create Header HTML Markup
                 case "html":
-                    var htmlRegex = /<\/?[a-z][\s\S]*>/i;
+                    //var htmlRegex = /<\/?[a-z][\s\S]*>/i;
                     // Check for valid HTML
-                    if (content.length > 0 && htmlRegex.test(content)) {
+                    //if (content.length > 0 && htmlRegex.test(content)) {
+                	if (content.length > 0 && checkMarkup(content)) {
                         sectionObj.sContent = content;
                         sectionObj.sContentType = contentType;
                     } else {
@@ -283,8 +284,10 @@
                     if (typeof(content) == "string" && content.length > 0) {
                         contentObj.cContent = content;
                         // Check if content is Text or HTML markup
-                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
-                        if (htmlRegex.test(content)) {
+                        //var htmlRegex = /<\/?[a-z][\s\S]*>/i;
+                        //if (htmlRegex.test(content)) {
+
+                        if (checkMarkup(content)) {
                             contentObj.cType = "html";
                         } else {
                             contentObj.cType = type;
@@ -300,8 +303,9 @@
                     if (typeof(content) == "string" && content.length > 0) {
                         contentObj.cContent = content;
                         // Check for HTML markup
-                        var htmlRegex = /<\/?[a-z][\s\S]*>/i;
-                        if (htmlRegex.test(content)) {
+                        //var htmlRegex = /<\/?[a-z][\s\S]*>/i;
+                        //if (htmlRegex.test(content)) {
+                        if (checkMarkup(content)) {
                             contentObj.cType = "html_page";
                         } else {
                             contentObj.cType = type;
@@ -375,6 +379,32 @@
                 return "";
             }
         };
+
+        /**
+		 * Validate HTML string
+		 * @private
+		 * @param {string} htmlString - Stringified HTML to be validated
+		 * @returns {boolean} true - If the string is valid HTML markup <br/> false - If the string contains an unknown element <br/> null - If the string is not wellformed HTML
+		 */
+		var checkMarkup = function(htmlString) {
+		    var parser = new DOMParser(),
+		        d = parser.parseFromString('<?xml version="1.0"?>' + htmlString, 'text/xml'),
+		        allnodes;
+		    if (d.querySelector('parsererror')) {
+		        console.error("Content contains malformed HTML");
+		        return null;
+		    } else {
+		        d = parser.parseFromString(htmlString, 'text/html');
+		        allnodes = d.getElementsByTagName('*');
+		        for (var i = allnodes.length - 1; i >= 0; i--) {
+		            if (allnodes[i] instanceof HTMLUnknownElement) {
+		            	console.error("Content contains an unknown HTML element");
+		            	return false;
+		            }
+		        }
+		    }
+		    return true; // The document is syntactically correct, all tags are closed
+		};
 
         /** 
          * Creates an image in the Header, Footer or Body  of the document
