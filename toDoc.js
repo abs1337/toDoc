@@ -71,13 +71,13 @@
         doc.createSection = function(sectionType, contentType, content, position, align, size, font) {
 
             // Store section data and settings as an object
-            var sectionObj = {
-                "sContentType": "",
-                "sContent": "",
-                "sPosition": 0,
-                "sAlign": "",
-                "sSize": "",
-                "sFont": "",
+            var docObj = {
+                "oContentType": "",
+                "oContent": "",
+                "oPosition": 0,
+                "oAlign": "",
+                "oSize": "",
+                "oFont": "",
                 "iAlign": "",
                 "iWidth": "",
                 "iHeight": "",
@@ -85,9 +85,9 @@
 
             // Validate and set position
             if (!position) {
-                sectionObj.sPosition = 0;
+                docObj.oPosition = 0;
             } else if (position && Number.isInteger(position) && position > 0) {
-                sectionObj.sPosition = position;
+                docObj.oPosition = position;
             } else {
                 console.error(position + " is an invalid header position, expected number");
                 return;
@@ -95,9 +95,9 @@
 
             // Validate and set alignment
             if (!align) {
-                sectionObj.sAlign = "left";
+                docObj.oAlign = "left";
             } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
-                sectionObj.sAlign = align;
+                docObj.oAlign = align;
             } else {
                 console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
                 return;
@@ -106,9 +106,9 @@
             // Validate and set font size
             var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                sectionObj.sSize = "16px";
+                docObj.oSize = "16px";
             } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
-                sectionObj.sSize = size;
+                docObj.oSize = size;
             } else {
                 console.error(size + " is an invalid header position, expected number");
                 return;
@@ -116,9 +116,9 @@
 
             // Validate and set font family
             if (!font) {
-                sectionObj.sFont = "";
+                docObj.oFont = "";
             } else if (font && typeof(font) == "string") {
-                sectionObj.sFont = font;
+                docObj.oFont = font;
             } else {
                 console.error(font + " is an invalid header position, expected number");
                 return;
@@ -129,8 +129,8 @@
                 // Create Header Text
                 case "text":
                     if (content.length > 0 && typeof(content) == "string") {
-                        sectionObj.sContent = escapeMarkup(content);
-                        sectionObj.sContentType = contentType;
+                        docObj.oContent = escapeMarkup(content);
+                        docObj.oContentType = contentType;
                     } else {
                         console.error(content + "is not an valid value for the parameter 'content', expected string");
                         return;
@@ -142,8 +142,8 @@
                     // Check for valid HTML
                     //if (content.length > 0 && htmlRegex.test(content)) {
                 	if (content.length > 0 && checkMarkup(content)) {
-                        sectionObj.sContent = content;
-                        sectionObj.sContentType = contentType;
+                        docObj.oContent = content;
+                        docObj.oContentType = contentType;
                     } else {
                         console.error("Invalid HTML markup");
                         return;
@@ -158,9 +158,9 @@
             // Create section based on type - Header / Footer and push to respestive array
             if (sectionType.length > 0 && typeof(sectionType) == "string" && (sectionType === "header" || sectionType === "footer")) {
                 if (sectionType === "header") {
-                    oData.aHeader.push(sectionObj);
+                    oData.aHeader.push(docObj);
                 } else if (sectionType === "footer") {
-                    oData.aFooter.push(sectionObj);
+                    oData.aFooter.push(docObj);
                 }
             } else {
                 console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
@@ -180,18 +180,18 @@
             // Sort by ascending position
             if (sections.length > 1) {
                 sections.sort(function(a, b) {
-                    var posA = a["cPosition"];
-                    var posB = b["cPosition"];
+                    var posA = a.oPosition;
+                    var posB = b.oPosition;
                     return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
                 });
             }
             // Stich section elements together
             if (sections.length > 0) {
                 sections.forEach(function(i) {
-                    if (i.sContentType === "text") {
-                        sectionString = sectionString + "<p align='" + i.sAlign + "' style='font-size : " + i.sSize + "; font-family : " + i.sFont + ", Times New Roman;'>" + i.sContent + oData.paraEnd;
-                    } else if (i.sContentType === "image" || i.sContentType === "html") {
-                        sectionString = sectionString + i.sContent;
+                    if (i.oContentType === "text") {
+                        sectionString = sectionString + "<p align='" + i.oAlign + "' style='font-size : " + i.oSize + "; font-family : " + i.oFont + ", Times New Roman;'>" + i.oContent + oData.paraEnd;
+                    } else if (i.oContentType === "image" || i.oContentType === "html") {
+                        sectionString = sectionString + i.oContent;
                     }
                 });
             }
@@ -212,13 +212,13 @@
          */
         doc.createContent = function(type, content, position, align, size, font) {
 
-            var contentObj = {
-                "cContent": "",
-                "cPosition": 0,
-                "cType": "",
-                "cAlign": "",
-                "cSize": "",
-                "cFont": "",
+            var docObj = {
+                "oContentType": "",
+                "oContent": "",
+                "oPosition": 0,
+                "oAlign": "",
+                "oSize": "",
+                "oFont": "",
                 "iAlign": "",
                 "iWidth": "",
                 "iHeight": "",
@@ -226,20 +226,20 @@
 
             // Validate and set position
             if (!position) {
-                contentObj.cPosition = 0;
+                docObj.oPosition = 0;
             } else if (position && Number.isInteger(position) && position > 0) {
                 // Check for duplicate content position
                 if (oData.aContent.length > 0) {
                 	for(var i = 0; i < oData.aContent.length; i++) {
-                		if (oData.aContent[i].cPosition == position) {
+                		if (oData.aContent[i].oPosition == position) {
                             console.error("Content with position: " + position + " has already been defined, enter new position for " + content);
                             return;
                         } else {
-                            contentObj.cPosition = position;
+                            docObj.oPosition = position;
                         }
                 	}
                 } else {
-                	contentObj.cPosition = position;
+                	docObj.oPosition = position;
                 }
             } else {
                 console.error(position + " is an invalid header position, expected number");
@@ -248,9 +248,9 @@
 
             // Validate and set alignment
             if (!align) {
-                contentObj.cAlign = "left";
+                docObj.oAlign = "left";
             } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
-                contentObj.cAlign = align;
+                docObj.oAlign = align;
             } else {
                 console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
                 return;
@@ -259,9 +259,9 @@
             // Validate and set font size
             var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                contentObj.cSize = "16px";
+                docObj.oSize = "16px";
             } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
-                contentObj.cSize = size;
+                docObj.oSize = size;
             } else {
                 console.error(size + " is an invalid header position, expected number");
                 return;
@@ -269,9 +269,9 @@
 
             // Validate and set font face
             if (!font) {
-                contentObj.cFont = "";
+                docObj.oFont = "";
             } else if (font && typeof(font) == "string") {
-                contentObj.cFont = font;
+                docObj.oFont = font;
             } else {
                 console.error(font + " is an invalid header position, expected number");
                 return;
@@ -282,17 +282,17 @@
                 // Create a Paragraph with text or HTML markup
                 case "paragraph":
                     if (typeof(content) == "string" && content.length > 0) {
-                        //contentObj.cContent = content;
+                        //docObj.oContent = content;
                         // Check if content is Text or HTML markup
                         //var htmlRegex = /<\/?[a-z][\s\S]*>/i;
                         //if (htmlRegex.test(content)) {
 
                         if (checkMarkup(content)) {
-                            contentObj.cType = "html";
-                            contentObj.cContent = content;
+                            docObj.oContentType = "html";
+                            docObj.oContent = content;
                         } else {
-                            contentObj.cType = type;
-                            contentObj.cContent = escapeMarkup(content)
+                            docObj.oContentType = type;
+                            docObj.oContent = escapeMarkup(content);
                         }
                     } else {
                         console.error(content + " is not an valid value for the parameter 'content', expected string");
@@ -303,16 +303,16 @@
                     // Create a page with HTML markup
                 case "page":
                     if (typeof(content) == "string" && content.length > 0) {
-                        //contentObj.cContent = content;
+                        //docObj.oContent = content;
                         // Check for HTML markup
                         //var htmlRegex = /<\/?[a-z][\s\S]*>/i;
                         //if (htmlRegex.test(content)) {
                         if (checkMarkup(content)) {
-                            contentObj.cType = "html_page";
-                            contentObj.cContent = content;
+                            docObj.oContentType = "html_page";
+                            docObj.oContent = content;
                         } else {
-                            contentObj.cType = type;
-                            contentObj.cContent = escapeMarkup(content)
+                            docObj.oContentType = type;
+                            docObj.oContent = escapeMarkup(content);
                         }
                     } else {
                         console.error(content + "is not an valid value for the parameter 'content', expected string");
@@ -327,7 +327,7 @@
             }
 
             // Push to array with other contents
-            oData.aContent.push(contentObj);
+            oData.aContent.push(docObj);
         };
 
         /** 
@@ -342,8 +342,8 @@
             // Sort by ascending position
             if (content.length > 1) {
                 content.sort(function(a, b) {
-                    var posA = a["cPosition"];
-                    var posB = b["cPosition"];
+                    var posA = a.oPosition;
+                    var posB = b.oPosition;
                     return (posA < posB) ? -1 : (posA > posB) ? 1 : 0;
                 });
             }
@@ -354,21 +354,21 @@
                 content.forEach(function(i, index) {
 
                     // Stitch markup based on content type
-                    if (i.cType === "paragraph") {
+                    if (i.oContentType === "paragraph") {
 
-                        contentString = contentString + "<p align='" + i.cAlign + "' style='font-size : " + i.cSize + "; font-family : " + i.cFont + ", Times New Roman;'>" + i.cContent + oData.paraEnd;
+                        contentString = contentString + "<p align='" + i.oAlign + "' style='font-size : " + i.oSize + "; font-family : " + i.oFont + ", Times New Roman;'>" + i.oContent + oData.paraEnd;
 
-                    } else if (i.cType === "page") {
+                    } else if (i.oContentType === "page") {
 
-                        contentString = oData.pageBreak + contentString + i.cContent;
+                        contentString = oData.pageBreak + contentString + i.oContent;
 
-                    } else if (i.cType === "image" || i.cType === "html") {
+                    } else if (i.oContentType === "image" || i.oContentType === "html") {
 
-                        contentString = contentString + oData.break+i.cContent + oData.break;
+                        contentString = contentString + oData.break+i.oContent + oData.break;
 
-                    } else if (i.cType === "html_page") {
+                    } else if (i.oContentType === "html_page") {
 
-                        contentString = oData.pageBreak + contentString + i.cContent;
+                        contentString = oData.pageBreak + contentString + i.oContent;
 
                     }
 
@@ -397,50 +397,31 @@
          */
         doc.createImage = function(sectionType, imageURL, position, align, imageWidth, imageHeight) {
 
-            // Store section data and settings
-            var sectionObj = {
-                "sContentType": "",
-                "sContent": "",
-                "sPosition": 0,
-                "sAlign": "",
-                "sSize": "",
-                "sFont": "",
+            var imageObj = {
+                "oContentType": "",
+                "oContent": "",
+                "oPosition": 0,
+                "oAlign": "",
+                "oSize": "",
+                "oFont": "",
                 "iAlign": "",
                 "iWidth": "",
                 "iHeight": "",
             };
-
-            var contentObj = {
-                "cContent": "",
-                "cPosition": 0,
-                "cType": "",
-                "cAlign": "",
-                "cSize": "",
-                "cFont": "",
-                "iAlign": "",
-                "iWidth": "",
-                "iHeight": "",
-            };
-
-            var imageObj = {};
 
             // Create image for header/footer or body
             if (sectionType.length > 0 && typeof(sectionType) == "string" && (sectionType === "header" || sectionType === "footer" || sectionType === "body")) {
-                if (sectionType === "header" || sectionType === "footer") {
-                    imageObj = sectionObj;
-                } else if (sectionType === "body") {
-                    imageObj = contentObj;
-                }
+            	imageObj.oContentType = "image";
             } else {
-                console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
+                console.error(sectionType + " is an invalid section type, expected 'header', 'footer' or 'body'");
                 return;
             }
 
             // Validate and set position
             if (!position) {
-                imageObj.sPosition = 0;
+                imageObj.oPosition = 0;
             } else if (position && Number.isInteger(position) && position > 0) {
-                imageObj.sPosition = position;
+                imageObj.oPosition = position;
             } else {
                 console.error(position + " is an invalid header position, expected number");
                 return;
@@ -448,10 +429,10 @@
 
             // Validate and set alignment
             if (!align) {
-                imageObj.sAlign = "left";
+                imageObj.oAlign = "left";
                 imageObj.iAlign = "left";
             } else if (align && (align === "left" || align === "center" || align === "right" || align === "justify")) {
-                imageObj.sAlign = align;
+                imageObj.oAlign = align;
                 imageObj.iAlign = align;
             } else {
                 console.error(align + " is an invalid alignment for image, expected 'left', 'top', 'middle', 'left' or 'right'");
@@ -482,10 +463,8 @@
             var urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
             // Check for Data URL
             if (imageURL.indexOf("data") == 0) {
-                var imgHTML = "<div align='" + imageObj.imgAlign + "'><img width='" + imageObj.imgWidth + "' height='" + imageObj.imgHeight + "' src='" + imageURL + "' crossOrigin='anonymous'></img>"
-                imageObj.sContent = imgHTML;
-                imageObj.cType = "image";
-                imageObj.sContentType = "image";
+                var imgHTML = "<div align='" + imageObj.imgAlign + "'><img width='" + imageObj.imgWidth + "' height='" + imageObj.imgHeight + "' src='" + imageURL + "' crossOrigin='anonymous'></img>";
+                imageObj.oContent = imgHTML;
             } else if (urlRegex.test(imageURL)) { // Check for URL
                 var imgUrl = imageURL,
                     imgAlign = imageObj.iAlign,
@@ -493,9 +472,7 @@
                     imgHeight = imageObj.iWidth;
                 // Get image as DATA URL
                 getImage(imgUrl, imgAlign, imgWidth, imgHeight, function(imgMarkup) {
-                    imageObj.sContent = imgMarkup;
-                    imageObj.cType = "image";
-                    imageObj.sContentType = "image";
+                    imageObj.oContent = imgMarkup;
                 });
             } else {
                 console.error(imageURL + "is not an valid value for the parameter 'imageURL', expected image url/path");
@@ -525,7 +502,7 @@
          */
         var getImage = function(url, imgAlign, imgWidth, imgHeight, callBack) {
             var image = new Image();
-            image.crossOrigin = "anonymous"
+            image.crossOrigin = "anonymous";
 
             // Execute after image loads
             image.onload = function() {
@@ -549,7 +526,7 @@
                     // Get canvas contents as a data URL
                     var imgAsDataURL = imgCanvas.toDataURL("image/png");
 
-                    var imgHTML = "<div align='" + imgAlign + "'><img width='" + imgWidth + "' height='" + imgHeight + "' src='" + imgAsDataURL + "' crossOrigin='anonymous'></img>"
+                    var imgHTML = "<div align='" + imgAlign + "'><img width='" + imgWidth + "' height='" + imgHeight + "' src='" + imgAsDataURL + "' crossOrigin='anonymous'></img>";
 
                     // Return data URL in HTML tags
                     if (callBack) {
@@ -561,7 +538,7 @@
                     console.error("cannot reach image url");
                     return "";
                 }
-            }
+            };
             
             // Load image
             image.src = url;
@@ -601,13 +578,13 @@
         doc.createPagenumber = function(sectionType, format, align, size, font) {
 
             // Store section data and settings
-            var sectionObj = {
-                "sContentType": "",
-                "sContent": "",
-                "sPosition": 0,
-                "sAlign": "",
-                "sSize": "",
-                "sFont": "",
+            var docObj = {
+                "oContentType": "",
+                "oContent": "",
+                "oPosition": 0,
+                "oAlign": "",
+                "oSize": "",
+                "oFont": "",
                 "iAlign": "",
                 "iWidth": "",
                 "iHeight": "",
@@ -615,9 +592,9 @@
 
             // Validate and set alignment
             if (!align) {
-                sectionObj.sAlign = "left";
+                docObj.oAlign = "left";
             } else if (align && (align === "left" || align === "center" || align === "right")) {
-                sectionObj.sAlign = align;
+                docObj.oAlign = align;
             } else {
                 console.error(align + " is an invalid alignment for image, expected 'left', 'center' or 'right'");
                 return;
@@ -626,9 +603,9 @@
             // Validate text's font size
             var fontSizeRegex = /(?:[^\d]\.| |^)((?:\d+\.)?\d+) *pt$|px$|em$/; // Regex for number followed by 'pt', 'px' or 'em'
             if (!size) {
-                sectionObj.sSize = "16px";
+                docObj.oSize = "16px";
             } else if (size && typeof(size) == "string" && fontSizeRegex.test(size)) {
-                sectionObj.sSize = size;
+                docObj.oSize = size;
             } else {
                 console.error(size + " is an invalid header position, expected number");
                 return;
@@ -636,9 +613,9 @@
 
             // Validate text's font face
             if (!font) {
-                sectionObj.sFont = "";
+                docObj.oFont = "";
             } else if (font && typeof(font) == "string") {
-                sectionObj.sFont = font;
+                docObj.oFont = font;
             } else {
                 console.error(font + " is an invalid font style");
                 return;
@@ -646,9 +623,9 @@
 
             // Format page number
             if (!format || format === 1) {
-                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "' style='font-size : '" + sectionObj.sSize + "; font-family : " + sectionObj.sFont + ", Times New Roman;'>" + oData.pageNum_1 + oData.paraEnd;
+                docObj.oContent = "<p align='" + docObj.oAlign + "' style='font-size : '" + docObj.oSize + "; font-family : " + docObj.oFont + ", Times New Roman;'>" + oData.pageNum_1 + oData.paraEnd;
             } else if (format === 2) {
-                sectionObj.sContent = "<p align='" + sectionObj.sAlign + "' style='font-size : '" + sectionObj.sSize + "; font-family : " + sectionObj.sFont + ", Times New Roman;'>" + oData.pageNum_2 + oData.paraEnd;
+                docObj.oContent = "<p align='" + docObj.oAlign + "' style='font-size : '" + docObj.oSize + "; font-family : " + docObj.oFont + ", Times New Roman;'>" + oData.pageNum_2 + oData.paraEnd;
             } else {
                 console.error(format + " is an invalid format for page numbers, expected number 1/2");
                 return; 
@@ -657,9 +634,9 @@
             // Insert page number in specified section and push to respestive array
             if (sectionType.length > 0 && typeof(sectionType) == "string" && (sectionType === "header" || sectionType === "footer")) {
                 if (sectionType === "header") {
-                    oData.aHeader.push(sectionObj);
+                    oData.aHeader.push(docObj);
                 } else if (sectionType === "footer") {
-                    oData.aFooter.push(sectionObj);
+                    oData.aFooter.push(docObj);
                 }
             } else {
                 console.error(sectionType + " is an invalid section type, expected 'header' or 'footer'");
@@ -791,7 +768,7 @@
                     "</div>"+
                     // End Section 1
                 "</body>"+
-            "</html>"
+            "</html>";
 
             var blob = new Blob(['\ufeff', documentMarkup], {
                 type: 'application/msword'
@@ -875,18 +852,20 @@
 		 * @memberof toDoc
 		 */
 		var escapeMarkup = function(textString) {
-		  var map = {
-		    '&': '&amp;',
-		    '<': '&lt;',
-		    '>': '&gt;',
-		    '"': '&quot;',
-		    "'": '&#039;'
-		  };
-		  return textString.replace(/[&<>"']/g, function(m) { return map[m]; });
+		    var map = {
+		        '&': '&amp;',
+		        '<': '&lt;',
+		        '>': '&gt;',
+		        '"': '&quot;',
+		        "'": '&#039;'
+		    };
+		    return textString.replace(/[&<>"']/g, function(m) {
+		        return map[m];
+		    });
 		};
 
         return doc;
-    };
+    }
 
     // Set Lib globally and save to window
     if (typeof(window.toDoc) === 'undefined') {
