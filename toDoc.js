@@ -829,7 +829,7 @@
 		        d = parser.parseFromString('<?xml version="1.0"?>' + htmlString, 'text/xml'),
 		        allnodes;
 		    if (d.querySelector('parsererror')) {
-		        console.error("Content contains malformed HTML");
+		        console.warn("Content contains malformed HTML, ignore if entering text");
 		        return null;
 		    } else {
 		        d = parser.parseFromString(htmlString, 'text/html');
