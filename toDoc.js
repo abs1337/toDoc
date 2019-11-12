@@ -514,19 +514,34 @@
                 if (image != null && (nWidth && nHeight)) {
 
                     var imgCanvas = document.createElement("canvas"),
-                        imgContext = imgCanvas.getContext("2d");
+                        imgContext = imgCanvas.getContext("2d"),
+                        canvasWidth = "",
+                        canvasHeight = "";
 
-                    // Make sure canvas is as big as the picture
-                    imgCanvas.width = image.width;
-                    imgCanvas.height = image.height;
+                 	// Set custom Width
+                    if (imgWidth) {
+                    	imgCanvas.width = imgWidth;
+                    	canvasWidth = imgWidth;
+                    } else { // or use default Width
+                    	imgCanvas.width = image.width;
+                    	canvasWidth = image.width;
+                    }    
+                    // set custom Height
+                    if (imgHeight) {
+                    	imgCanvas.height = imgHeight;
+                    	canvasHeight = imgHeight;
+                    } else { // or use default Height
+                    	imgCanvas.height = image.height;
+                    	canvasHeight = image.height;
+                    }
 
                     // Draw image into canvas element
-                    imgContext.drawImage(image, 0, 0, image.width, image.height);
+                    imgContext.drawImage(image, 0, 0, canvasWidth, canvasHeight);
 
                     // Get canvas contents as a data URL
                     var imgAsDataURL = imgCanvas.toDataURL("image/png");
 
-                    var imgHTML = "<div align='" + imgAlign + "'><img width='" + imgWidth + "' height='" + imgHeight + "' src='" + imgAsDataURL + "' crossOrigin='anonymous'></img></div>";
+                    var imgHTML = "<div align='" + imgAlign + "'><img src='" + imgAsDataURL + "' crossOrigin='anonymous'></img></div>";
 
                     // Return data URL in HTML tags
                     if (callBack) {
